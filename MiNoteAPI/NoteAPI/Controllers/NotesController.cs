@@ -42,7 +42,7 @@ namespace NoteAPI.Controllers
 
         public IHttpActionResult GetNote(int id)
         {
-            var note = _broker.ReadObjects().FirstOrDefault(p => p.Id == id);
+            var note = _broker.ReadObjects().FirstOrDefault(p => (int)p["_id"] == id);
             if (note == null)
             {
                 NotFound();

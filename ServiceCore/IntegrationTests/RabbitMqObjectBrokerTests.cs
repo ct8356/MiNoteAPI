@@ -44,10 +44,10 @@ namespace IntegrationTests
             var broker = _sut;
             broker.CreateObject(jObject);
 
-            var actualId = broker.ReadObjects().Max(o => o._id);
+            var actualId = broker.ReadObjects().Max(o => o["_id"]);
             Assert.AreEqual(3, actualId);
-            var actualObject = broker.ReadObjects().First(o => o._id == actualId);
-            Assert.AreEqual("new object", actualObject.Content);
+            var actualObject = broker.ReadObjects().First(o => o["_id"] == actualId);
+            Assert.AreEqual("new object", actualObject["Content"]);
         }
 
         [Test]
@@ -63,9 +63,9 @@ namespace IntegrationTests
             var broker = _sut;
             broker.UpdateObject(jObject);
 
-            var actualObject = broker.ReadObjects().First(o => o._id == 1);
-            Assert.AreEqual(1, actualObject._id);
-            Assert.AreEqual("new object", actualObject.Content);    
+            var actualObject = broker.ReadObjects().First(o => (int)o["_id"] == 1);
+            Assert.AreEqual(1, actualObject["_id"]);
+            Assert.AreEqual("new object", actualObject["Content"]);    
         }
 
         [Test]

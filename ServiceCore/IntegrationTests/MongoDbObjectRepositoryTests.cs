@@ -35,10 +35,11 @@ namespace IntegrationTests
             var repository = _sut;
             repository.CreateObject(jObject);
 
-            var actualId = repository.ReadObjects().Max(o => o._id);
+            var jObjects = repository.ReadObjects();
+            int actualId = (int)jObjects.Max(o => o["_id"]);
             Assert.AreEqual(3, actualId);
-            var actualObject = repository.ReadObjects().First(o => o._id == actualId);
-            Assert.AreEqual("new object", actualObject.Content);
+            var actualObject = repository.ReadObjects().First(o => (int)o["_id"] == actualId);
+            Assert.AreEqual("new object", (string)actualObject["Content"]);
         }
 
         [Test]
@@ -54,9 +55,9 @@ namespace IntegrationTests
             var repository = _sut;
             repository.UpdateObject(jObject);
 
-            var actualObject = repository.ReadObjects().First(o => o._id == 1);
-            Assert.AreEqual(1, actualObject._id);
-            Assert.AreEqual("new object", actualObject.Content);    
+            var actualObject = repository.ReadObjects().First(o => (int)o["_id"] == 1);
+            Assert.AreEqual(1, (int)actualObject["_id"]);
+            Assert.AreEqual("new object", (string)actualObject["Content"]);
         }
 
         [Test]

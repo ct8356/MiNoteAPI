@@ -5,6 +5,6 @@ namespace ServiceInterfaces
 {
     public interface IObjectReader
     {
-        ICollection<dynamic> ReadObjects();
+        ICollection<JObject> ReadObjects();
     }
 }

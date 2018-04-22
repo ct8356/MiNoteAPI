@@ -36,7 +36,7 @@ namespace ServiceCore
             _messagePublisher.PublishMessage("CreateNote", message);
         }
 
-        public ICollection<dynamic> ReadObjects()
+        public ICollection<JObject> ReadObjects()
         {
             //SEND
             var message = "Some message";
@@ -62,10 +62,10 @@ namespace ServiceCore
             //Yes that is possible... Makes sense in fact. Yes I think so...
             var receivedMessage = _messageConsumer.ConsumeMessage();
             var jObjects = JObject.Parse(receivedMessage);
-            var objects = new List<dynamic>();
+            var objects = new List<JObject>();
             for (int i = 0; i < jObjects.Count; i++)
             {
-                objects.Add(jObjects[i]);
+                //objects.Add(jObjects[i]);
             }
             return objects;
         }

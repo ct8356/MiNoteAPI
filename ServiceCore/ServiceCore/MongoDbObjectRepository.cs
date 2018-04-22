@@ -44,7 +44,7 @@ namespace ServiceCore
         public void CreateObject(JObject jObject)
         {
             var objects = ReadObjects();
-            var newId = objects.Max(o => o._id) + 1;
+            var newId = (int)objects.Max(o => o["_id"]) + 1;
             jObject["_id"] = newId;
             var doc = BsonDocument.Parse(jObject.ToString());
             //sadly,  jObject.ToBsonDocument() does not work. (get lots of unwanted props).
@@ -54,9 +54,9 @@ namespace ServiceCore
             //AND puts all props in a values object.
         }
 
-        public ICollection<dynamic> ReadObjects()
+        public ICollection<JObject> ReadObjects()
         {
-            var objects = new List<dynamic>();
+            var objects = new List<JObject>();
             //For some reason, I can only get below to work for Documents.
             //When I use Objects, Deserialize breaks. Cannot handle it.
             //Think its because Deserialize, has to accept documents!
@@ -64,8 +64,9 @@ namespace ServiceCore
             var documents = Documents.Find(new BsonDocument()).ToList();
             for (int i = 0; i < documents.Count; i++)
             {
-                objects.Add(BsonSerializer.Deserialize<dynamic>(documents[i]));
+                var @object = BsonSerializer.Deserialize<dynamic>(documents[i]);
                 //pretty sure the deserialize method converts _id to Id, if put Note in <type>.
+                objects.Add(JObject.FromObject(@object));
             }
             return objects;
         }

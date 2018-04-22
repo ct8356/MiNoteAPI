@@ -18,7 +18,7 @@ namespace ServiceCore
         public void CreateObject(JObject jObject)
         {
             var objects = ObjectReader.ReadObjects();
-            var newId = objects.Max(o => o._id) + 1;
+            var newId = (int)objects.Max(o => o["_id"]) + 1;
             jObject["_id"] = newId;
             var doc = BsonDocument.Parse(jObject.ToString());
             //sadly,  jObject.ToBsonDocument() does not work. (get lots of unwanted props).
