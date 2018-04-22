@@ -8,6 +8,9 @@ namespace ServiceInterfaces
 {
     public interface IMessageConsumer
     {
+        string HostName { get; set; }
+        string QueueName { get; set; }
+        event MessageEventHandler MessageReceived;
         string ConsumeMessage();
     }
 }

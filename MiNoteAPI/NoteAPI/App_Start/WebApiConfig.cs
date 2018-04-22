@@ -23,12 +23,13 @@ namespace NoteAPI
             // Register types
             container.RegisterType<IObjectBroker, RabbitMqObjectBroker>
                 (new HierarchicalLifetimeManager());
-            container.RegisterType<IMessageConsumer, MessageConsumer>
-                (new InjectionConstructor("localhost", "NoteAPI"));
-            container.RegisterType<IMessagePublisher, MessagePublisher>
-                (new InjectionConstructor("localhost", ""));
+            container.RegisterType<IMessageConsumer, RabbitConsumer>();
+            container.RegisterType<IMessagePublisher, RabbitPublisher>();
+            //(new InjectionConstructor("localhost", ""));
             //Must use default exchange "" if want to use queueName in routing key.
             //Otherwise must set up bindings for queues.
+            container.RegisterType<IMessageConsumerObjectCreator, RabbitConsumerMongoCreator>();
+            container.RegisterType<IObjectReaderMessagePublisher, MongoReaderRabbitPublisher>();
 
             // Set resolver
             config.DependencyResolver = new UnityResolver(container);

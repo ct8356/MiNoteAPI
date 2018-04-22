@@ -10,8 +10,8 @@ namespace ServiceCore
     public class Service : IService
     {
 
-        MessageConsumer _messageConsumer;
-        MessagePublisher _messagePublisher;
+        RabbitConsumer _messageConsumer;
+        RabbitPublisher _messagePublisher;
 
         public void Start()
         {

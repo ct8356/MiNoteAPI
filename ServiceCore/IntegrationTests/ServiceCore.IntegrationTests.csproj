@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{73EC0981-E04D-405C-8085-174D7E7FC6B3}</ProjectGuid>
+    <ProjectGuid>{2F0DED8B-B1AF-4E81-812A-1A35B803508D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IntegrationTests</RootNamespace>
@@ -68,20 +68,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageConsumerPublisherTests.cs" />
     <Compile Include="MongoDbObjectRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RabbitConsumerMongoCreatorTests.cs" />
+    <Compile Include="MongoReaderRabbitPublisherTests.cs" />
+    <Compile Include="RabbitMqObjectBrokerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ServiceCore\ServiceInterfaces\ServiceInterfaces.csproj">
+    <ProjectReference Include="..\ServiceCore\ServiceCore.csproj">
+      <Project>{c9c4f6cb-e9a3-4669-8777-893a25381abb}</Project>
+      <Name>ServiceCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{4c3db823-4533-48b9-b91f-37d0da04af62}</Project>
       <Name>ServiceInterfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NoteService\NoteService.csproj">
-      <Project>{12527040-b69d-4dc8-972c-c565c3e6eb77}</Project>
-      <Name>NoteService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

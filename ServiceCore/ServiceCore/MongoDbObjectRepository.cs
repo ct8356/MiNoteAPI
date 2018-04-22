@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using ServiceInterfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace NoteService
+namespace ServiceCore
 {
 
     public class MongoDbObjectRepository : IObjectBroker
@@ -108,7 +107,7 @@ namespace NoteService
             Objects.InsertMany(documents);
         }
 
-        private void SeedWithNotes()
+        /*private void SeedWithNotes()
         {
             var notes = new List<Note>() {
                 new Note() {
@@ -139,7 +138,7 @@ namespace NoteService
             {
                 Documents.InsertOne(note.ToBsonDocument());
             }
-        }
+        }*/
 
         private void SeedWithBsonDocuments()
         {

@@ -49,8 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IObjectReaderMessagePublisher.cs" />
+    <Compile Include="IMessageConsumerObjectCreator.cs" />
+    <Compile Include="MessageEventHandler.cs" />
+    <Compile Include="IMessageEventArgs.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <Compile Include="IMessageConsumer.cs" />
+    <Compile Include="IObjectDeleter.cs" />
+    <Compile Include="IObjectUpdater.cs" />
+    <Compile Include="IObjectReader.cs" />
+    <Compile Include="IObjectCreator.cs" />
     <Compile Include="IObjectBroker.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

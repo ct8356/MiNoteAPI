@@ -1,28 +1,21 @@
 ﻿using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using ServiceInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceCore
 {
-    public class MessagePublisher : IMessagePublisher
+    public class RabbitPublisher : IMessagePublisher
     {
-        string _hostName;
-        string _exchangeName;
-        
-        public MessagePublisher(string hostName, string exchangeName)
-        {
-            _hostName = hostName;
-            _exchangeName = exchangeName;           
+        public string HostName { get; set; }
+        public string ExchangeName { get; set; }
+
+        public RabbitPublisher()
+        {           
         }
 
         public void PublishMessage(string routingKey, string message)
         {
-            var factory = new ConnectionFactory() { HostName = _hostName };
+            var factory = new ConnectionFactory() { HostName = HostName };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -36,7 +29,7 @@ namespace ServiceCore
                 var body = Encoding.UTF8.GetBytes(message);
 
                 channel.BasicPublish(
-                    exchange: _exchangeName,
+                    exchange: ExchangeName,
                     routingKey: routingKey,
                     basicProperties: null,
                     body: body);

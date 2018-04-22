@@ -13,8 +13,8 @@ namespace IntegrationTests
     public class MessageConsumerPublisherTests
     {
 
-        protected MessageConsumer _consumer;
-        protected MessagePublisher _publisher;
+        protected RabbitConsumer _consumer;
+        protected RabbitPublisher _publisher;
         protected string _queueName;
 
         [OneTimeSetUp]
@@ -22,8 +22,16 @@ namespace IntegrationTests
         {
             var hostName = "localhost";
             _queueName = "hello";
-            _consumer = new MessageConsumer(hostName, _queueName);
-            _publisher = new MessagePublisher(hostName, "");
+            _consumer = new RabbitConsumer()
+            {
+                HostName = hostName,
+                QueueName = _queueName,
+            };
+            _publisher = new RabbitPublisher()
+            {
+                HostName = hostName,
+                ExchangeName = "",
+            };
         }
 
         [Test]

@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NoteService;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
+using ServiceCore;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntegrationTests
 {

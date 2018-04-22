@@ -20,6 +20,8 @@ namespace ServiceCore
         public RabbitMqObjectBroker(IMessageConsumer messageConsumer, IMessagePublisher messagePublisher)
         {
             _messageConsumer = messageConsumer;
+            _messageConsumer.HostName = "localHost";
+            _messageConsumer.QueueName = "";
             _messagePublisher = messagePublisher;
         }
 

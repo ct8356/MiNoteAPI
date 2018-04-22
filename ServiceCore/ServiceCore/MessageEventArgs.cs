@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ServiceInterfaces;
+using System;
 
 namespace ServiceCore
 {
-    public class MessageEventArgs : EventArgs
+    public class MessageEventArgs : EventArgs, IMessageEventArgs
     {
 
         public string Message { get; private set; }

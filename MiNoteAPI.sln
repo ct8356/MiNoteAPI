@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteAPI", "MiNoteAPI\NoteAPI\NoteAPI.csproj", "{CC2F3704-8360-4339-A95F-5BF7193C135C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiNoteAPI.UnitTests", "MiNoteAPI\NUnitTests\MiNoteAPI.UnitTests.csproj", "{2D1D18CB-60A8-44CC-9C87-749D321D92D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteAPI.UnitTests", "MiNoteAPI\NUnitTests\NoteAPI.UnitTests.csproj", "{2D1D18CB-60A8-44CC-9C87-749D321D92D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiNoteAPI.IntegrationTests", "MiNoteAPI\IntegrationTests\MiNoteAPI.IntegrationTests.csproj", "{DBFD09E4-EBDC-45C9-B053-90878B392534}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteAPI.IntegrationTests", "MiNoteAPI\IntegrationTests\NoteAPI.IntegrationTests.csproj", "{DBFD09E4-EBDC-45C9-B053-90878B392534}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteService", "NoteService\NoteService\NoteService.csproj", "{12527040-B69D-4DC8-972C-C565C3E6EB77}"
 EndProject
@@ -15,17 +15,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterfaces", "Servic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NoteService", "NoteService", "{78AD5434-9656-4A38-A201-A861AAC94C12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "NoteService\IntegrationTests\IntegrationTests.csproj", "{73EC0981-E04D-405C-8085-174D7E7FC6B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteService.IntegrationTests", "NoteService\IntegrationTests\NoteService.IntegrationTests.csproj", "{73EC0981-E04D-405C-8085-174D7E7FC6B3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceCore", "ServiceCore", "{FA130A13-DD1E-411C-A40D-C11261014CB9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiNoteAPI", "MiNoteAPI", "{9246FD54-0B76-4354-8554-899315C58912}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NoteAPI", "NoteAPI", "{9246FD54-0B76-4354-8554-899315C58912}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceCore", "ServiceCore\ServiceCore\ServiceCore.csproj", "{C9C4F6CB-E9A3-4669-8777-893A25381ABB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "ServiceCore\IntegrationTests\IntegrationTests.csproj", "{2F0DED8B-B1AF-4E81-812A-1A35B803508D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceCore.IntegrationTests", "ServiceCore\IntegrationTests\ServiceCore.IntegrationTests.csproj", "{2F0DED8B-B1AF-4E81-812A-1A35B803508D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NoteService\NUnitTests\NUnitTests.csproj", "{12644DAB-0605-4D50-B9F3-F99C77C193E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteService.UnitTests", "NoteService\NUnitTests\NoteService.UnitTests.csproj", "{12644DAB-0605-4D50-B9F3-F99C77C193E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

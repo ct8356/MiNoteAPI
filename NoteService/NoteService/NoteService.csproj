@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\FakeObjectRepository.cs" />
-    <Compile Include="DAL\MongoDbObjectRepository.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="NoteService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
