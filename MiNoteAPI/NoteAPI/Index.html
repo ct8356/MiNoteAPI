@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Note App</title>
+</head>
+<body>
+    <div id="content"></div>
+    <div id="input"></div>
+    <div>
+        <h2>All Notes</h2>
+        <ul id="notes" />
+    </div>
+    <!--<div>
+        <h2>Search by ID</h2>
+        <input type="text" id="noteId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="note" />
+    </div>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script src="../Scripts/CommentBox.jsx"></script>
+    <script src="../Scripts/InputBox.jsx"></script>
+    <script>
+        var uri = 'api/notes';
+
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uri).done(function (data) {
+                // For each item contained in data:
+                $.each(data, function (key, item) {
+                    //For each property contained in item:
+                    $.each(item, function (propname, prop) {
+                        // Add a list item for the note.
+                        $('<li>', { text: prop }).appendTo($('#notes'));
+                    });
+                });
+            });
+        });
+
+        /*function find() {
+            var id = $('#noteId').val();
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    $('#note').text(formatItem(data));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#note').text('Error: ' + err);
+                });
+        }*/
+    </script>
+</body>
+</html>
