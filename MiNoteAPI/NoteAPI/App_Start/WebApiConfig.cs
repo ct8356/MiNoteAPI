@@ -1,14 +1,11 @@
-﻿using NoteService;
-using ServiceCore;
+﻿using DatabaseInterfaces;
+using RabbitCore;
+using RabbitMongoService;
 using ServiceInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Unity;
-using Unity.Injection;
 using Unity.Lifetime;
 
 namespace NoteAPI
@@ -21,14 +18,14 @@ namespace NoteAPI
             var container = new UnityContainer();
 
             // Register types
-            container.RegisterType<IObjectBroker, RabbitMqObjectBroker>
+            container.RegisterType<IObjectBroker, RabbitBroker>
                 (new HierarchicalLifetimeManager());
             container.RegisterType<IMessageConsumer, RabbitConsumer>();
             container.RegisterType<IMessagePublisher, RabbitPublisher>();
             //(new InjectionConstructor("localhost", ""));
             //Must use default exchange "" if want to use queueName in routing key.
             //Otherwise must set up bindings for queues.
-            container.RegisterType<IMessageConsumerObjectCreator, RabbitConsumerMongoCreator>();
+            container.RegisterType<IAutoMessageConsumerObjectCreator, RabbitAutoConsumerMongoCreator>();
             container.RegisterType<IObjectReaderMessagePublisher, MongoReaderRabbitPublisher>();
 
             // Set resolver

@@ -233,9 +233,17 @@
       <Project>{12527040-b69d-4dc8-972c-c565c3e6eb77}</Project>
       <Name>NoteService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ServiceCore\ServiceCore\ServiceCore.csproj">
+    <ProjectReference Include="..\..\Other\DatabaseInterfaces\DatabaseInterfaces.csproj">
+      <Project>{088ce085-2f9b-4869-a1f4-8b4bbfc9a298}</Project>
+      <Name>DatabaseInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceCore\RabbitMongoService\RabbitMongoService.csproj">
+      <Project>{8f2aa35d-fe2a-47e0-b108-79317d54841a}</Project>
+      <Name>RabbitMongoService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ServiceCore\ServiceCore\RabbitCore.csproj">
       <Project>{c9c4f6cb-e9a3-4669-8777-893a25381abb}</Project>
-      <Name>ServiceCore</Name>
+      <Name>RabbitCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ServiceCore\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{4c3db823-4533-48b9-b91f-37d0da04af62}</Project>

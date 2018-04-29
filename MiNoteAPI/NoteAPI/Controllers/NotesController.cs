@@ -1,14 +1,9 @@
-﻿using System;
+﻿using DatabaseInterfaces;
+using MongoDB.Driver;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Bson.Serialization;
-using Newtonsoft.Json.Linq;
-using ServiceInterfaces;
 
 namespace NoteAPI.Controllers
 {

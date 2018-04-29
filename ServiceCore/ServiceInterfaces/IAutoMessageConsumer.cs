@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceInterfaces
 {
-    public interface IMessageConsumer
+    public interface IAutoMessageConsumer
     {
         //AutoConsumers:
         //have Start and Stop,
@@ -19,6 +19,8 @@ namespace ServiceInterfaces
         //then call it again.
         string HostName { get; set; }
         string QueueName { get; set; }
-        string ConsumeMessage();
+        event MessageEventHandler MessageReceived;
+        void Start();
+        void Stop();
     }
 }
