@@ -10,12 +10,12 @@ namespace IntegrationTests
     public class MongoDbObjectRepositoryTests
     {
 
-        protected MongoDbObjectRepository _sut;
+        protected MongoBroker _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new MongoDbObjectRepository();
+            _sut = new MongoBroker();
             var repo = _sut;
             repo.Initialize("test");
             repo.DeleteEverything();

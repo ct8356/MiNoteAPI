@@ -12,7 +12,7 @@ namespace IntegrationTests
     [TestFixture]
     public class RabbitAutoConsumerMongoCreatorReaderTests
     {
-        protected MongoDbObjectRepository _repo;
+        protected MongoBroker _repo;
         protected RabbitPublisher _publisher;
         protected RabbitAutoConsumerMongoCreator _consumerCreator;
         protected MongoReader _objectReader;
@@ -24,7 +24,7 @@ namespace IntegrationTests
             var hostName = "localHost";
             var exchangeName = "";
             var queueName = "CreateNote";
-            _repo = new MongoDbObjectRepository();
+            _repo = new MongoBroker();
             _repo.Initialize("test");
             _repo.DeleteEverything();
 
