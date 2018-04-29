@@ -6,18 +6,14 @@ using Unity.Exceptions;
 
 namespace NoteAPI
 {
-
     public class UnityResolver : IDependencyResolver
     {
+
         protected IUnityContainer container;
 
         public UnityResolver(IUnityContainer container)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException("container");
-            }
-            this.container = container;
+            this.container = container ?? throw new ArgumentNullException("container");
         }
 
         public object GetService(Type serviceType)
@@ -59,5 +55,6 @@ namespace NoteAPI
         {
             container.Dispose();
         }
+
     }
 }

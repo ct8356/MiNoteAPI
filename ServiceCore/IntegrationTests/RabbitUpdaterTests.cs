@@ -18,15 +18,8 @@ namespace IntegrationTests
             var hostName = "localHost";
             var queueName = "CreateNote";
             var exchangeName = "";
-            var messageConsumer = new RabbitConsumer() {
-                HostName = hostName,
-                QueueName = queueName,
-            };
-            var messagePublisher = new RabbitPublisher()
-            {
-                HostName = hostName,
-                ExchangeName = "",
-            };
+            var messageConsumer = new RabbitConsumer(hostName, queueName);
+            var messagePublisher = new RabbitPublisher(hostName, exchangeName, queueName);
             _creator = new RabbitCreator(messagePublisher);
             _reader = new RabbitReader(messageConsumer, messagePublisher);
             _updater = new RabbitUpdater(messagePublisher);

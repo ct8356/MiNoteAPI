@@ -38,16 +38,15 @@ namespace RabbitCore
 
         private void ConsumeMessage()
         {
-        //Apparently, this should not be async.
-        //The async bit (with Task.Run{ Task.ReturnFrom() }) 
-        //should be in the UI thread only.
+            //Apparently, this should not be async.
+            //The async bit (with Task.Run{ Task.ReturnFrom() }) 
+            //should be in the UI thread only.
             _channel.QueueDeclare(
                 queue: QueueName,
                 durable: false,
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
-
             var consumer = new EventingBasicConsumer(_channel);
             string message = null;
             consumer.Received += (model, e) =>
@@ -59,7 +58,6 @@ namespace RabbitCore
                 //calls Consume again, to set consumer to active again.
                 //So it is always waiting for a message.
             }; //the callback method, once message finally received.
-
             _channel.BasicConsume(
                 queue: QueueName,
                 autoAck: true,

@@ -11,11 +11,10 @@ namespace RabbitMongoService
         IObjectCreator _objectCreator;
         public event EventHandler EntryCreated;
 
-        public RabbitAutoConsumerMongoCreator
-            (IAutoMessageConsumer autoConsumer, IObjectCreator objectCreator)
+        public RabbitAutoConsumerMongoCreator(
+            IAutoMessageConsumer autoConsumer, 
+            IObjectCreator objectCreator)
         {  
-            autoConsumer.HostName = "localhost";
-            autoConsumer.QueueName = "CreateNote";
             autoConsumer.MessageReceived += OnMessageReceived;    
             _autoConsumer = autoConsumer;
             _objectCreator = objectCreator;

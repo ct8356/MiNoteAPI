@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MongoCreator.cs" />
-    <Compile Include="MongoDbObjectRepository.cs" />
+    <Compile Include="MongoBroker.cs" />
     <Compile Include="MongoReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

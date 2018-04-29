@@ -15,35 +15,29 @@ namespace IntegrationTests
         protected MongoBroker _repo;
         protected RabbitPublisher _publisher;
         protected RabbitAutoConsumerMongoCreator _consumerCreator;
-        protected MongoReader _objectReader;
+        protected MongoCreator Creator;
+        protected MongoReader Reader;
         protected AutoResetEvent _autoResetEvent;
 
         [OneTimeSetUp]
         public void SetUp()
         {
+            var databaseName = "test";
+            var collectionName = "Objects";
             var hostName = "localHost";
             var exchangeName = "";
             var queueName = "CreateNote";
-            _repo = new MongoBroker();
+
+            Reader = new MongoReader(databaseName, collectionName);
+            Creator = new MongoCreator(Reader, databaseName, collectionName);
+            _repo = new MongoBroker(Creator, Reader, null, null);
             _repo.Initialize("test");
             _repo.DeleteEverything();
 
-            _publisher = new RabbitPublisher()
-            {
-                HostName = hostName,
-                ExchangeName = exchangeName,
-            };
-
+            _publisher = new RabbitPublisher(hostName, exchangeName, queueName);
             var autoConsumer = new RabbitAutoConsumer(hostName, queueName);
-            _objectReader = new MongoReader()
-            {
-                Documents = _repo.Documents,
-            };
-            var objectCreator = new MongoCreator()
-            {
-                ObjectReader = _objectReader,
-                Documents = _repo.Documents,
-            };
+            Reader = new MongoReader(databaseName, collectionName);
+            var objectCreator = new MongoCreator(Reader, databaseName, collectionName);
             _consumerCreator = new RabbitAutoConsumerMongoCreator(autoConsumer, objectCreator);
             _consumerCreator.EntryCreated += _consumerCreator_EntryCreated;
             _autoResetEvent = new AutoResetEvent(false);
@@ -61,10 +55,10 @@ namespace IntegrationTests
             var message = jObject.ToString();
             _consumerCreator.Start();
 
-            _publisher.PublishMessage("CreateNote", message);
+            _publisher.PublishMessage(message);
             _autoResetEvent.WaitOne(); //Wait until message received.
 
-            var jObjects = _objectReader.ReadObjects();
+            var jObjects = Reader.ReadObjects();
             var actualJObject = jObjects.FirstOrDefault();
             Assert.AreEqual("", actualJObject["Content"]);
             _consumerCreator.Stop();

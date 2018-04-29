@@ -19,13 +19,10 @@ namespace IntegrationTests
         public void OneTimeSetUp()
         {
             var hostName = "localhost";
+            var exchangeName = "";
             _queueName = "hello";
             _consumer = new RabbitAutoConsumer(hostName, _queueName);
-            _publisher = new RabbitPublisher()
-            {
-                HostName = hostName,
-                ExchangeName = "",
-            };
+            _publisher = new RabbitPublisher(hostName, exchangeName, _queueName);
             _autoResetEvent = new AutoResetEvent(false);
         }
 

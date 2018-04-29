@@ -10,10 +10,13 @@ namespace MongoClient
 {
     public class MongoReader : IObjectReader
     {
-        public IMongoCollection<BsonDocument> Documents { get; set; }
+        IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoReader()
+        public MongoReader(string databaseName, string collectionName)
         {
+            var client = new MongoDB.Driver.MongoClient();
+            var database = client.GetDatabase(databaseName);
+            Documents = database.GetCollection<BsonDocument>(collectionName);
         }
 
         public ICollection<JObject> ReadObjects()

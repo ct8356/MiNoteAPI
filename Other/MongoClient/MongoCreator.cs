@@ -8,11 +8,17 @@ namespace MongoClient
 {
     public class MongoCreator : IObjectCreator
     {
-        public IObjectReader ObjectReader { get; set; }
-        public IMongoCollection<BsonDocument> Documents { get; set; }
+        IObjectReader ObjectReader { get; set; }
+        IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoCreator()
+        public MongoCreator(IObjectReader reader, string databaseName, string collectionName)
         {
+            ObjectReader = reader;
+            var client = new MongoDB.Driver.MongoClient();
+            var database = client.GetDatabase(databaseName);
+            Documents = database.GetCollection<BsonDocument>(collectionName);
+            //Could just say, every collection is called Objects!
+            //BUT, should define it in the Unity container!
         }
 
         public void CreateObject(JObject jObject)

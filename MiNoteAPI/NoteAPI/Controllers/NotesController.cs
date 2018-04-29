@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Unity.Attributes;
 
 namespace NoteAPI.Controllers
 {
@@ -12,7 +13,7 @@ namespace NoteAPI.Controllers
 
         private IObjectBroker _broker;
 
-        public NotesController(IObjectBroker broker)
+        public NotesController([Dependency("RabbitBroker")]IObjectBroker broker)
         {
             //NOTE, this controller gets called everytime you access the page.
             //BUT on first run, it takes its sweet time!

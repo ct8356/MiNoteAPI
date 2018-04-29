@@ -237,6 +237,10 @@
       <Project>{088ce085-2f9b-4869-a1f4-8b4bbfc9a298}</Project>
       <Name>DatabaseInterfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Other\MongoClient\MongoClient.csproj">
+      <Project>{FBB63D03-0EF0-4011-9B70-438AF70DB936}</Project>
+      <Name>MongoClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ServiceCore\RabbitMongoService\RabbitMongoService.csproj">
       <Project>{8f2aa35d-fe2a-47e0-b108-79317d54841a}</Project>
       <Name>RabbitMongoService</Name>

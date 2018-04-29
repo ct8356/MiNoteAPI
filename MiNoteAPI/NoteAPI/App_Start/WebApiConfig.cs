@@ -1,4 +1,5 @@
 ﻿using DatabaseInterfaces;
+using MongoClient;
 using RabbitCore;
 using RabbitMongoService;
 using ServiceInterfaces;
@@ -6,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Unity;
+using Unity.Injection;
 using Unity.Lifetime;
 
 namespace NoteAPI
@@ -18,21 +20,74 @@ namespace NoteAPI
             var container = new UnityContainer();
 
             // Register types
-            container.RegisterType<IObjectBroker, RabbitBroker>
-                (new HierarchicalLifetimeManager());
-            container.RegisterType<IMessageConsumer, RabbitConsumer>();
-            container.RegisterType<IMessagePublisher, RabbitPublisher>();
-            //(new InjectionConstructor("localhost", ""));
-            //Must use default exchange "" if want to use queueName in routing key.
-            //Otherwise must set up bindings for queues.
-            container.RegisterType<IAutoMessageConsumerObjectCreator, RabbitAutoConsumerMongoCreator>();
-            container.RegisterType<IObjectReaderMessagePublisher, MongoReaderRabbitPublisher>();
+            RegisterTypes(container);
 
             // Set resolver
             config.DependencyResolver = new UnityResolver(container);
 
             // Edit config
             EditConfiguration(config);
+        }
+
+        private static void RegisterTypes(UnityContainer container)
+        {
+            // NOTE: should try and do most of this by NAMING convention!
+            // Keys
+            var rabbit = "rabbit";
+            var mongo = "mongo";
+
+            // Rabbit Core
+            container.RegisterType<IMessagePublisher, RabbitPublisher>
+                (new InjectionConstructor("localhost", "", "NoteAPI"));
+            // Use default exchange "" to use queueName as routing key.
+
+            // Rabbit Client
+            container.RegisterType<IMessageConsumer, RabbitConsumer>();
+            container.RegisterType<IObjectCreator, RabbitCreator>(rabbit);
+            container.RegisterType<IObjectReader , RabbitReader >(rabbit);
+            container.RegisterType<IObjectUpdater, RabbitUpdater>(rabbit);
+            container.RegisterType<IObjectDeleter, RabbitDeleter>(rabbit);
+            container.RegisterType<IObjectBroker , RabbitBroker >(
+                new HierarchicalLifetimeManager(),
+                new InjectionConstructor(
+                    new ResolvedParameter<IObjectCreator>(rabbit),
+                    new ResolvedParameter<IObjectReader >(rabbit),
+                    new ResolvedParameter<IObjectUpdater>(rabbit),
+                    new ResolvedParameter<IObjectDeleter>(rabbit)
+                )
+            ); //need to name it as rabbit somehow, so controller knows to use THIS one!
+            //Maybe I can just Register the controller here myself?
+
+            // Rabbit Service
+            container.RegisterType<IAutoMessageConsumer, RabbitAutoConsumer>();
+
+            // Mongo Client
+            container.RegisterType<IObjectCreator, MongoCreator>(mongo);
+            container.RegisterType<IObjectReader , MongoReader >(mongo);
+            //container.RegisterType<IObjectUpdater, MongoUpdater>(mongo);
+            //container.RegisterType<IObjectDeleter, MongoDeleter>(mongo);
+            container.RegisterType<IObjectBroker , MongoBroker >(
+                mongo,
+                new InjectionConstructor(
+                    new ResolvedParameter<IObjectCreator>(mongo),
+                    new ResolvedParameter<IObjectReader >(mongo),
+                    new ResolvedParameter<IObjectUpdater>(mongo),
+                    new ResolvedParameter<IObjectDeleter>(mongo)
+                )
+            );
+
+            // Rabbit Mongo Service
+            container.RegisterType<IAutoMessageConsumerObjectCreator, RabbitAutoConsumerMongoCreator>();
+            container.RegisterType<IObjectReaderMessagePublisher, MongoReaderRabbitPublisher>();
+            //AH! Possible that the above, should autoConsume, then read, then publish!
+            //container.RegisterType<IAutoConsumerEntryUpdater, RabbitMongoUpdater>();
+            //container.RegisterType<IAutoConsumerEntryDeleter, RabbitMongoDeleter>();
+            container.RegisterType<IService, Service>(
+                new InjectionConstructor(
+                    new ResolvedParameter<IAutoMessageConsumerObjectCreator>(),
+                    new ResolvedParameter<IObjectReaderMessagePublisher>()
+                )
+            );
         }
 
         private static void EditConfiguration(HttpConfiguration config)

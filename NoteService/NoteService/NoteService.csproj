@@ -76,6 +76,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ServiceCore\RabbitMongoService\RabbitMongoService.csproj">
+      <Project>{8F2AA35D-FE2A-47E0-B108-79317D54841A}</Project>
+      <Name>RabbitMongoService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ServiceCore\ServiceInterfaces\ServiceInterfaces.csproj">
       <Project>{4c3db823-4533-48b9-b91f-37d0da04af62}</Project>
       <Name>ServiceInterfaces</Name>

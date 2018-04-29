@@ -14,32 +14,28 @@ namespace IntegrationTests
         protected MongoBroker _broker;
         protected MongoReaderRabbitPublisher _readerPublisher;
         protected RabbitConsumer _consumer;
+        MongoCreator Creator { get; set; }
+        MongoReader Reader { get; set; }
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
+            var databaseName = "test";
+            var collectionName = "Objects";
             var hostName = "localHost";
             var exchangeName = "";
-            _broker = new MongoBroker();
-            _broker.Initialize("test");
+            var queueName = "NoteAPI";           
+            Reader = new MongoReader(databaseName, collectionName);
+            Creator = new MongoCreator(Reader, databaseName, collectionName);
+            _broker = new MongoBroker(Creator, Reader, null, null);
+            _broker.Initialize(databaseName);
             _broker.DeleteEverything();
 
-            var objectReader = new MongoReader()
-            {
-                Documents = _broker.Documents,
-            };
-            var messagePublisher = new RabbitPublisher()
-            {
-                HostName = hostName,
-                ExchangeName = exchangeName,
-            };
+            var objectReader = new MongoReader(databaseName, collectionName);
+            var messagePublisher = new RabbitPublisher(hostName, exchangeName, queueName);
             _readerPublisher = new MongoReaderRabbitPublisher(objectReader, messagePublisher);
 
-            _consumer = new RabbitConsumer()
-            {
-                HostName = hostName,
-                QueueName = "NoteAPI",
-            };
+            _consumer = new RabbitConsumer(hostName, queueName);
         }
 
         [Test]

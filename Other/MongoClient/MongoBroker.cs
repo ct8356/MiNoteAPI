@@ -1,6 +1,5 @@
 ﻿using DatabaseInterfaces;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,23 +8,33 @@ using System.Linq;
 
 namespace MongoClient
 {
-
     public class MongoBroker : IObjectBroker
     {
-        public IMongoDatabase Database { get; set; }
-        public IMongoCollection<BsonDocument> Documents { get; set; }
-        public IMongoCollection<dynamic> Objects { get; set; }
 
-        public MongoBroker()
+        public IMongoCollection<BsonDocument> Documents { get; set; }
+        IMongoCollection<dynamic> Objects { get; set; }
+        IObjectCreator _creator;
+        IObjectReader _reader;
+        IObjectUpdater _updater;
+        IObjectDeleter _deleter;
+
+        public MongoBroker(
+            IObjectCreator creator,
+            IObjectReader reader,
+            IObjectUpdater updater,
+            IObjectDeleter deleter)
         {
-            //Parameterless constructor gets used by controller.
+            //Parameterless constructor gets used by controller?
+            _creator = creator;
+            _reader = reader;
+            _updater = updater;
+            _deleter = deleter;
         }
 
         public void Initialize(string databaseName)
         {
-            // Connect to MongoDB instance running on localhost
             var client = new MongoDB.Driver.MongoClient();
-            Database = client.GetDatabase(databaseName);
+            var Database = client.GetDatabase(databaseName);
             Documents = Database.GetCollection<BsonDocument>("Objects"); 
             //Documents is needed for adding to db, and reading from db (deserializing).
             Objects = Database.GetCollection<dynamic>("Objects");
@@ -43,33 +52,12 @@ namespace MongoClient
 
         public void CreateObject(JObject jObject)
         {
-            var objects = ReadObjects();
-            var maxId = (int?)objects.Max(o => o["_id"]);
-            var newId =  (maxId ?? 0) + 1;
-            jObject["_id"] = newId;
-            var doc = BsonDocument.Parse(jObject.ToString());
-            //sadly,  jObject.ToBsonDocument() does not work. (get lots of unwanted props).
-            Documents.InsertOne(doc);
-            //AH! I think if object gets casted to a dynamic object,
-            //THEN it gets funny properties like _t!!
-            //AND puts all props in a values object.
+            _creator.CreateObject(jObject);
         }
 
         public ICollection<JObject> ReadObjects()
         {
-            var objects = new List<JObject>();
-            //For some reason, I can only get below to work for Documents.
-            //When I use Objects, Deserialize breaks. Cannot handle it.
-            //Think its because Deserialize, has to accept documents!
-            //"Find" might work with different type from Document. Can experiment later.
-            var documents = Documents.Find(new BsonDocument()).ToList();
-            for (int i = 0; i < documents.Count; i++)
-            {
-                var @object = BsonSerializer.Deserialize<dynamic>(documents[i]);
-                //pretty sure the deserialize method converts _id to Id, if put Note in <type>.
-                objects.Add(JObject.FromObject(@object));
-            }
-            return objects;
+            return _reader.ReadObjects();
         }
 
         public void UpdateObject(JObject jObject)
@@ -155,7 +143,7 @@ namespace MongoClient
             Documents.InsertMany(documents);
         }
 
-        #endregion Seed methods
+        #endregion
 
     }
 }

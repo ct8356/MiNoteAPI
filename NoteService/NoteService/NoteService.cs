@@ -1,18 +1,22 @@
-﻿using ServiceInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RabbitMongoService;
+using ServiceInterfaces;
 
 namespace NoteService
 {
-    class NoteService
-    {
-        //This class should have a MessageConsumer,
-        //and a repository.
-        //It is responsible for taking messages from the queue,
-        //and converting them into calls to change/get stuff from the repo.
+    public class NoteService : Service
+    { 
+        /* Don't really even need this class. Or project.
+         * All this is here for, is to specify name of database and/or collection.
+         * Can do that from Unity container.
+         * So try that! Register<IService>().With<RabbitMongoService>().WithParams("dbName");
+         */
+
+        public NoteService(
+            IAutoMessageConsumerObjectCreator consumerCreator,
+            IObjectReaderMessagePublisher readerPublisher
+        ) : base(consumerCreator, readerPublisher, "Notes")
+        {
+        }
 
     }
 }

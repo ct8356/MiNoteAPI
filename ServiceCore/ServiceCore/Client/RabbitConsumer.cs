@@ -13,8 +13,10 @@ namespace RabbitCore
         public string QueueName { get; set; }
         protected AutoResetEvent _autoResetEvent;
 
-        public RabbitConsumer()
+        public RabbitConsumer(string hostName, string queueName)
         {
+            HostName = hostName;
+            QueueName = queueName;
             //this cannot be inherited through interface!
             //BUT the IOC container must know about this project, so ok!
             //If a class or project needs more than one MessageConsumer,

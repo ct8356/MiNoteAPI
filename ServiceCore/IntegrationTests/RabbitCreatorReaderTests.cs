@@ -10,7 +10,7 @@ namespace IntegrationTests
     public class RabbitCreatorReaderTests
     {
         protected RabbitCreator _creator;
-        protected RabbitReader _reader;  
+        protected RabbitReader _reader;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -18,22 +18,10 @@ namespace IntegrationTests
             var hostName = "localHost";
             var queueName = "CreateNote";
             var exchangeName = "";
-            var messageConsumer = new RabbitConsumer() {
-                HostName = hostName,
-                QueueName = queueName,
-            };
-            var messagePublisher = new RabbitPublisher()
-            {
-                HostName = hostName,
-                ExchangeName = exchangeName,
-            };
+            var messageConsumer = new RabbitConsumer(hostName, queueName);
+            var messagePublisher = new RabbitPublisher(hostName, exchangeName, queueName);
             _creator = new RabbitCreator(messagePublisher);
-            _reader = new RabbitReader(messageConsumer, messagePublisher);     
-            /* This will only work if 
-             * have a RabbitMongoService or something, running in background.
-             * SO these tests should be in RabbitMongoService, probs.
-             * 
-             */
+            _reader = new RabbitReader(messageConsumer, messagePublisher);           
         }
 
         [Test]

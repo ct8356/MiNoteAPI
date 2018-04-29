@@ -7,15 +7,20 @@ using System.Linq;
 namespace IntegrationTests
 {
     [TestFixture]
-    public class MongoDbObjectRepositoryTests
+    public class MongoBrokerTests
     {
-
+        MongoCreator Creator { get; set; }
+        MongoReader Reader { get; set; }
         protected MongoBroker _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new MongoBroker();
+            var databaseName = "test";
+            var collectionName = "Objects";
+            Reader = new MongoReader(databaseName, collectionName);
+            Creator = new MongoCreator(Reader, databaseName, collectionName);
+            _sut = new MongoBroker(Creator, Reader, null, null);
             var repo = _sut;
             repo.Initialize("test");
             repo.DeleteEverything();
