@@ -5,12 +5,12 @@ namespace RabbitMongoService
     public class Service : IService
     { 
 
-        IAutoMessageConsumerObjectCreator _consumerCreator;
-        IObjectReaderMessagePublisher _readerPublisher;
+        IAutoConsumerCreator _consumerCreator;
+        IAutoConsumerReader _readerPublisher;
 
         public Service(
-            IAutoMessageConsumerObjectCreator consumerCreator, 
-            IObjectReaderMessagePublisher readerPublisher,
+            IAutoConsumerCreator consumerCreator, 
+            IAutoConsumerReader readerPublisher,
             string databaseName)
         {
             _consumerCreator = consumerCreator;

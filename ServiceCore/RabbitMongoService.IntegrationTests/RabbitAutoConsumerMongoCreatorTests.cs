@@ -14,7 +14,7 @@ namespace IntegrationTests
     {
         protected MongoBroker _repo;
         protected RabbitPublisher _publisher;
-        protected RabbitAutoConsumerMongoCreator _consumerCreator;
+        protected AutoConsumerCreator _consumerCreator;
         protected MongoCreator Creator;
         protected MongoReader Reader;
         protected AutoResetEvent _autoResetEvent;
@@ -38,7 +38,7 @@ namespace IntegrationTests
             var autoConsumer = new RabbitAutoConsumer(hostName, queueName);
             Reader = new MongoReader(databaseName, collectionName);
             var objectCreator = new MongoCreator(Reader, databaseName, collectionName);
-            _consumerCreator = new RabbitAutoConsumerMongoCreator(autoConsumer, objectCreator);
+            _consumerCreator = new AutoConsumerCreator(autoConsumer, objectCreator);
             _consumerCreator.EntryCreated += _consumerCreator_EntryCreated;
             _autoResetEvent = new AutoResetEvent(false);
         }

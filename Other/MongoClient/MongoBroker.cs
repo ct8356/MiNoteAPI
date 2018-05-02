@@ -11,7 +11,7 @@ namespace MongoClient
     public class MongoBroker : IObjectBroker
     {
 
-        public IMongoCollection<BsonDocument> Documents { get; set; }
+        IMongoCollection<BsonDocument> Documents { get; set; }
         IMongoCollection<dynamic> Objects { get; set; }
         IObjectCreator _creator;
         IObjectReader _reader;
@@ -35,9 +35,9 @@ namespace MongoClient
         {
             var client = new MongoDB.Driver.MongoClient();
             var Database = client.GetDatabase(databaseName);
-            Documents = Database.GetCollection<BsonDocument>("Objects"); 
-            //Documents is needed for adding to db, and reading from db (deserializing).
+            Documents = Database.GetCollection<BsonDocument>("Objects");
             Objects = Database.GetCollection<dynamic>("Objects");
+            //Documents is needed for adding to db, and reading from db (deserializing).
         }
 
         public void ConditionalSeed()
@@ -62,22 +62,17 @@ namespace MongoClient
 
         public void UpdateObject(JObject jObject)
         {
-            var id = Convert.ToInt32(jObject["_id"]);
-            var filter = new BsonDocument("_id", id);
-            var doc = BsonDocument.Parse(jObject.ToString());
-            Documents.ReplaceOne(filter, doc);
+            _updater.UpdateObject(jObject);
         }
 
         public void DeleteObject(int id)
         {
-            var filter = new BsonDocument("_id", id);
-            Objects.DeleteOne(filter);
+            _deleter.DeleteObject(id);
         }
 
         public void DeleteEverything()
         {
             Documents.DeleteMany("{}");
-            Objects.DeleteMany("{}");
         }
 
         #region Seed methods

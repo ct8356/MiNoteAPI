@@ -2,9 +2,9 @@
 
 namespace ServiceInterfaces
 {
-    public interface IAutoMessageConsumerObjectCreator
+    public interface IAutoConsumerDeleter
     {
-        event EventHandler EntryCreated;
+        event EventHandler EntryDeleted;
         void Start();
         void Stop();
     }

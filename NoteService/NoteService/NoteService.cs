@@ -12,8 +12,8 @@ namespace NoteService
          */
 
         public NoteService(
-            IAutoMessageConsumerObjectCreator consumerCreator,
-            IObjectReaderMessagePublisher readerPublisher
+            IAutoConsumerCreator consumerCreator,
+            IAutoConsumerReader readerPublisher
         ) : base(consumerCreator, readerPublisher, "Notes")
         {
         }

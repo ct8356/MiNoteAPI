@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="MongoCreator.cs" />
     <Compile Include="MongoBroker.cs" />
+    <Compile Include="MongoDeleter.cs" />
+    <Compile Include="MongoUpdater.cs" />
     <Compile Include="MongoReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

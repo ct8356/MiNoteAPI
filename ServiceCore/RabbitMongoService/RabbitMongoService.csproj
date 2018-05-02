@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoReaderRabbitPublisher.cs" />
+    <Compile Include="AutoConsumerReader.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RabbitAutoConsumerMongoCreator.cs" />
+    <Compile Include="AutoConsumerCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Other\DatabaseInterfaces\DatabaseInterfaces.csproj">

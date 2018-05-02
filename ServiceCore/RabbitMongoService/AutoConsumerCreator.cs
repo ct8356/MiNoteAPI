@@ -5,13 +5,13 @@ using System;
 
 namespace RabbitMongoService
 {
-    public class RabbitAutoConsumerMongoCreator : IAutoMessageConsumerObjectCreator
+    public class AutoConsumerCreator : IAutoConsumerCreator
     {
         IAutoMessageConsumer _autoConsumer;
         IObjectCreator _objectCreator;
         public event EventHandler EntryCreated;
 
-        public RabbitAutoConsumerMongoCreator(
+        public AutoConsumerCreator(
             IAutoMessageConsumer autoConsumer, 
             IObjectCreator objectCreator)
         {  

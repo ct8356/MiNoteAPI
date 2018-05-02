@@ -11,11 +11,13 @@ namespace IntegrationTests
     [TestFixture]
     public class MongoReaderRabbitPublisherTests
     {
-        protected MongoBroker _broker;
-        protected MongoReaderRabbitPublisher _readerPublisher;
-        protected RabbitConsumer _consumer;
-        MongoCreator Creator { get; set; }
+        MongoBroker _broker;
+        MongoCreator Creator { get; set; } 
+        //IF can get away with just a creator,
+        //may as well
         MongoReader Reader { get; set; }
+        AutoConsumerReader _autoConsumerReader;
+        RabbitConsumer _consumer;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -31,9 +33,10 @@ namespace IntegrationTests
             _broker.Initialize(databaseName);
             _broker.DeleteEverything();
 
+            var autoConsumer = new RabbitAutoConsumer(hostName, queueName);
             var objectReader = new MongoReader(databaseName, collectionName);
             var messagePublisher = new RabbitPublisher(hostName, exchangeName, queueName);
-            _readerPublisher = new MongoReaderRabbitPublisher(objectReader, messagePublisher);
+            _autoConsumerReader = new AutoConsumerReader(autoConsumer, objectReader, messagePublisher);
 
             _consumer = new RabbitConsumer(hostName, queueName);
         }
@@ -48,8 +51,6 @@ namespace IntegrationTests
             };
             JObject jObject = JObject.FromObject(@object);
             _broker.CreateObject(jObject);
-
-            _readerPublisher.ReadObjectsAndPublishMessage();
 
             var message = _consumer.ConsumeMessage();
             var jObjects = JsonConvert.DeserializeObject<List<JObject>>(message);

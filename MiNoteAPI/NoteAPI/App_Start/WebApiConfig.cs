@@ -35,14 +35,19 @@ namespace NoteAPI
             // Keys
             var rabbit = "rabbit";
             var mongo = "mongo";
-
-            // Rabbit Core
-            container.RegisterType<IMessagePublisher, RabbitPublisher>
-                (new InjectionConstructor("localhost", "", "NoteAPI"));
-            // Use default exchange "" to use queueName as routing key.
+            var client = "client";
+            var service = "service";
+            // Other
+            var hostName = "localhost";
+            var exchangeName = "";
 
             // Rabbit Client
-            container.RegisterType<IMessageConsumer, RabbitConsumer>();
+            var queueName = 
+            container.RegisterType<IMessagePublisher, RabbitPublisher>(
+                client, new InjectionConstructor("", "", ""));
+            // Use default exchange "" to use queueName as routing key.
+            container.RegisterType<IMessageConsumer, RabbitConsumer>(
+                new InjectionConstructor(hostName, queueName));
             container.RegisterType<IObjectCreator, RabbitCreator>(rabbit);
             container.RegisterType<IObjectReader , RabbitReader >(rabbit);
             container.RegisterType<IObjectUpdater, RabbitUpdater>(rabbit);
@@ -56,18 +61,22 @@ namespace NoteAPI
                     new ResolvedParameter<IObjectDeleter>(rabbit)
                 )
             ); //need to name it as rabbit somehow, so controller knows to use THIS one!
-            //Maybe I can just Register the controller here myself?
+               //Maybe I can just Register the controller here myself?
+               //I think attributes in controller may have done it.
 
             // Rabbit Service
+            container.RegisterType<IMessagePublisher, RabbitPublisher>(
+                service,
+                new InjectionConstructor("localhost", "", "NoteAPI")
+            );
             container.RegisterType<IAutoMessageConsumer, RabbitAutoConsumer>();
 
             // Mongo Client
             container.RegisterType<IObjectCreator, MongoCreator>(mongo);
             container.RegisterType<IObjectReader , MongoReader >(mongo);
-            //container.RegisterType<IObjectUpdater, MongoUpdater>(mongo);
-            //container.RegisterType<IObjectDeleter, MongoDeleter>(mongo);
+            container.RegisterType<IObjectUpdater, MongoUpdater>(mongo);
+            container.RegisterType<IObjectDeleter, MongoDeleter>(mongo);
             container.RegisterType<IObjectBroker , MongoBroker >(
-                mongo,
                 new InjectionConstructor(
                     new ResolvedParameter<IObjectCreator>(mongo),
                     new ResolvedParameter<IObjectReader >(mongo),
@@ -77,15 +86,14 @@ namespace NoteAPI
             );
 
             // Rabbit Mongo Service
-            container.RegisterType<IAutoMessageConsumerObjectCreator, RabbitAutoConsumerMongoCreator>();
-            container.RegisterType<IObjectReaderMessagePublisher, MongoReaderRabbitPublisher>();
-            //AH! Possible that the above, should autoConsume, then read, then publish!
+            container.RegisterType<IAutoConsumerCreator, AutoConsumerCreator>();
+            container.RegisterType<IAutoConsumerReader , AutoConsumerReader >();
             //container.RegisterType<IAutoConsumerEntryUpdater, RabbitMongoUpdater>();
             //container.RegisterType<IAutoConsumerEntryDeleter, RabbitMongoDeleter>();
             container.RegisterType<IService, Service>(
                 new InjectionConstructor(
-                    new ResolvedParameter<IAutoMessageConsumerObjectCreator>(),
-                    new ResolvedParameter<IObjectReaderMessagePublisher>()
+                    new ResolvedParameter<IAutoConsumerCreator>(),
+                    new ResolvedParameter<IAutoConsumerReader >()
                 )
             );
         }
