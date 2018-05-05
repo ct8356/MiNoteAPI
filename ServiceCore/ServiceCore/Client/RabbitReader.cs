@@ -13,8 +13,6 @@ namespace RabbitCore
         public RabbitReader(IMessageConsumer messageConsumer, IMessagePublisher messagePublisher)
         {
             _messageConsumer = messageConsumer;
-            _messageConsumer.HostName = "localHost";
-            _messageConsumer.QueueName = ""; //TODO need to pass this. Specific to client.
             _messagePublisher = messagePublisher;
         }
 

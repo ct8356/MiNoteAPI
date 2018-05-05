@@ -40,12 +40,13 @@ namespace NoteAPI
             // Other
             var hostName = "localhost";
             var exchangeName = "";
+            // Use default exchange "" to use queueName as routing key.
 
             // Rabbit Client
-            var queueName = 
+            var queueName = "";
             container.RegisterType<IMessagePublisher, RabbitPublisher>(
-                client, new InjectionConstructor("", "", ""));
-            // Use default exchange "" to use queueName as routing key.
+                client, new InjectionConstructor(hostName, exchangeName, queueName)); 
+            //queueName should be different for each of below, SO hardcoded it in for now.          
             container.RegisterType<IMessageConsumer, RabbitConsumer>(
                 new InjectionConstructor(hostName, queueName));
             container.RegisterType<IObjectCreator, RabbitCreator>(rabbit);
@@ -65,10 +66,9 @@ namespace NoteAPI
                //I think attributes in controller may have done it.
 
             // Rabbit Service
+            var NoteApiQueueName = "NoteApi";
             container.RegisterType<IMessagePublisher, RabbitPublisher>(
-                service,
-                new InjectionConstructor("localhost", "", "NoteAPI")
-            );
+                service, new InjectionConstructor(hostName, exchangeName, NoteApiQueueName));
             container.RegisterType<IAutoMessageConsumer, RabbitAutoConsumer>();
 
             // Mongo Client
