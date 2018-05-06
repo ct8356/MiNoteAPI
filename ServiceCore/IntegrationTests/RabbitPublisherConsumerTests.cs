@@ -7,18 +7,17 @@ namespace IntegrationTests
     public class RabbitConsumerPublisherTests
     {
 
-        protected RabbitConsumer _consumer;
-        protected RabbitPublisher _publisher;
-        protected string _queueName;
+        MessageConsumer Consumer;
+        MessagePublisher Publisher;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             var hostName = "localhost";
             var exchangeName = "";
-            _queueName = "hello";
-            _consumer = new RabbitConsumer(hostName, _queueName);
-            _publisher = new RabbitPublisher(hostName, exchangeName, _queueName);
+            var queueName = "hello";
+            Consumer = new MessageConsumer(hostName, queueName);
+            Publisher = new MessagePublisher(hostName, exchangeName, queueName);
         }
 
         [Test]
@@ -26,8 +25,8 @@ namespace IntegrationTests
         {
             var messageSent = "Hello world!";
 
-            _publisher.PublishMessage(_queueName, messageSent);
-            var messageReceived = _consumer.ConsumeMessage();
+            Publisher.PublishMessage(messageSent);
+            var messageReceived = Consumer.ConsumeMessage();
 
             Assert.AreEqual(messageSent, messageReceived);
         }

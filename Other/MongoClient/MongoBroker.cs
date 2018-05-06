@@ -2,13 +2,12 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MongoClient
 {
-    public class MongoBroker : IObjectBroker
+    public class MongoBroker : IMongoEntryBroker
     {
 
         IMongoCollection<BsonDocument> Documents { get; set; }
@@ -24,7 +23,6 @@ namespace MongoClient
             IObjectUpdater updater,
             IObjectDeleter deleter)
         {
-            //Parameterless constructor gets used by controller?
             _creator = creator;
             _reader = reader;
             _updater = updater;

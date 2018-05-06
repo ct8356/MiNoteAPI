@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RabbitCore
 {
-    public class RabbitAutoConsumer : IAutoMessageConsumer
+    public class AutoMessageConsumer : IAutoMessageConsumer
     {
         IConnectionFactory _factory;
         IConnection _connection;
@@ -15,7 +15,7 @@ namespace RabbitCore
         public string QueueName { get; set; }
         public event MessageEventHandler MessageReceived;
 
-        public RabbitAutoConsumer(string hostName, string queueName)
+        public AutoMessageConsumer(string hostName, string queueName)
         {
             HostName = hostName;
             QueueName = queueName;

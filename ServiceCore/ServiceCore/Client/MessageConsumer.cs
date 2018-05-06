@@ -3,17 +3,16 @@ using RabbitMQ.Client.Events;
 using ServiceInterfaces;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace RabbitCore
 {
-    public class RabbitConsumer : IMessageConsumer
+    public class MessageConsumer : IMessageConsumer
     {
         public string HostName { get; set; }
         public string QueueName { get; set; }
         protected AutoResetEvent _autoResetEvent;
 
-        public RabbitConsumer(string hostName, string queueName)
+        public MessageConsumer(string hostName, string queueName)
         {
             HostName = hostName;
             QueueName = queueName;

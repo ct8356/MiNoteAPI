@@ -11,7 +11,7 @@ namespace IntegrationTests
     {
         MongoCreator Creator { get; set; }
         MongoReader Reader { get; set; }
-        protected MongoBroker _sut;
+        MongoBroker Broker;
 
         [SetUp]
         public void SetUp()
@@ -20,8 +20,8 @@ namespace IntegrationTests
             var collectionName = "Objects";
             Reader = new MongoReader(databaseName, collectionName);
             Creator = new MongoCreator(Reader, databaseName, collectionName);
-            _sut = new MongoBroker(Creator, Reader, null, null);
-            var repo = _sut;
+            Broker = new MongoBroker(Creator, Reader, null, null);
+            var repo = Broker;
             repo.Initialize("test");
             repo.DeleteEverything();
         }
@@ -36,7 +36,7 @@ namespace IntegrationTests
             };
             JObject jObject = JObject.FromObject(@object);
 
-            var repository = _sut;
+            var repository = Broker;
             repository.CreateObject(jObject);
 
             var jObjects = repository.ReadObjects();
@@ -54,7 +54,7 @@ namespace IntegrationTests
             };
             JObject jObject = JObject.FromObject(@object);
 
-            var repository = _sut;
+            var repository = Broker;
             repository.ConditionalSeed();
             repository.CreateObject(jObject);
 
@@ -73,13 +73,12 @@ namespace IntegrationTests
             };
             JObject jObject = JObject.FromObject(@object);
 
-            var repository = _sut;
-            repository.CreateObject(jObject);
+            Broker.CreateObject(jObject);
 
-            var jObjects = repository.ReadObjects();
+            var jObjects = Broker.ReadObjects();
             int actualId = (int)jObjects.Max(o => o["_id"]);
             Assert.AreEqual(1, actualId);
-            var actualObject = repository.ReadObjects().First(o => (int)o["_id"] == actualId);
+            var actualObject = Broker.ReadObjects().First(o => (int)o["_id"] == actualId);
             Assert.AreEqual("new object", (string)actualObject["Content"]);
         }
 
@@ -93,7 +92,7 @@ namespace IntegrationTests
             };
             JObject jObject = JObject.FromObject(@object);
 
-            var repository = _sut;
+            var repository = Broker;
             repository.ConditionalSeed();
             repository.UpdateObject(jObject);
 
@@ -105,7 +104,7 @@ namespace IntegrationTests
         [Test]
         public void DeleteObject_WithId_DeletesObject()
         {
-            var repository = _sut;
+            var repository = Broker;
             repository.ConditionalSeed();
             repository.DeleteObject(1);
 

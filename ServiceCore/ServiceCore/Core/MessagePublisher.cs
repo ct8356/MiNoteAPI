@@ -4,13 +4,13 @@ using System.Text;
 
 namespace RabbitCore
 {
-    public class RabbitPublisher : IMessagePublisher
+    public class MessagePublisher : IMessagePublisher
     {
         public string HostName { get; set; }
         public string ExchangeName { get; set; }
         public string DefaultRoutingKey { get; set; }
 
-        public RabbitPublisher(string hostName, string exchangeName, string defaultRoutingKey)
+        public MessagePublisher(string hostName, string exchangeName, string defaultRoutingKey)
         {
             HostName = hostName;
             ExchangeName = exchangeName;

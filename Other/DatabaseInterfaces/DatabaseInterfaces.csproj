@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IObjectBroker.cs" />
+    <Compile Include="IControllerEntryBroker.cs" />
+    <Compile Include="IMongoEntryBroker.cs" />
+    <Compile Include="IEntryBroker.cs" />
     <Compile Include="IObjectCreator.cs" />
     <Compile Include="IObjectDeleter.cs" />
     <Compile Include="IObjectReader.cs" />

@@ -1,16 +1,17 @@
 ﻿using DatabaseInterfaces;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ServiceInterfaces;
 using System.Collections.Generic;
 
 namespace RabbitCore
 {
-    public class RabbitReader : IObjectReader
+    public class EntryReader : IObjectReader
     {
         IMessageConsumer _messageConsumer;
         IMessagePublisher _messagePublisher;
 
-        public RabbitReader(IMessageConsumer messageConsumer, IMessagePublisher messagePublisher)
+        public EntryReader(IMessageConsumer messageConsumer, IMessagePublisher messagePublisher)
         {
             _messageConsumer = messageConsumer;
             _messagePublisher = messagePublisher;
@@ -30,7 +31,8 @@ namespace RabbitCore
             //OR perhaps, just each user, gets their own queue?
             //Yes that is possible... Makes sense in fact. Yes I think so...
             var receivedMessage = _messageConsumer.ConsumeMessage();
-            var jObjects = JObject.Parse(receivedMessage);
+            //var jObjects = JObject.Parse(receivedMessage); //Does not work, because it reads it as one object.
+            var jObjects = JsonConvert.DeserializeObject<List<JObject>>(receivedMessage);
             var objects = new List<JObject>();
             for (int i = 0; i < jObjects.Count; i++)
             {

@@ -1,6 +1,6 @@
 ﻿namespace DatabaseInterfaces
 {
-    public interface IObjectBroker 
+    public interface IEntryBroker 
         : IObjectCreator
         , IObjectReader
         , IObjectUpdater

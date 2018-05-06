@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace RabbitCore
 {
-    public class RabbitBroker : IObjectBroker
+    public class EntryBroker : IControllerEntryBroker
     {
         IObjectCreator _creator;
         IObjectReader _reader;
         IObjectUpdater _updater;
         IObjectDeleter _deleter;
 
-        public RabbitBroker(
+        public EntryBroker(
             IObjectCreator creator,
             IObjectReader reader,
             IObjectUpdater updater,

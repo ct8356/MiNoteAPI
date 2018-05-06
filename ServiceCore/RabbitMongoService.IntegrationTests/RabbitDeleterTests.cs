@@ -9,8 +9,8 @@ namespace IntegrationTests
     [TestFixture]
     public class RabbitDeleterTests
     {
-        protected RabbitCreator _creator;
-        protected RabbitReader _reader;
+        protected EntryCreator _creator;
+        protected EntryReader _reader;
         protected RabbitDeleter _deleter;
 
         [SetUp]
@@ -19,10 +19,10 @@ namespace IntegrationTests
             var hostName = "localHost";
             var queueName = "CreateNote";
             var exchangeName = "";
-            var messageConsumer = new RabbitConsumer(hostName, queueName);
-            var messagePublisher = new RabbitPublisher(hostName, exchangeName, queueName);
-            _creator = new RabbitCreator(messagePublisher);
-            _reader = new RabbitReader(messageConsumer, messagePublisher);
+            var messageConsumer = new MessageConsumer(hostName, queueName);
+            var messagePublisher = new MessagePublisher(hostName, exchangeName, queueName);
+            _creator = new EntryCreator(messagePublisher);
+            _reader = new EntryReader(messageConsumer, messagePublisher);
             _deleter = new RabbitDeleter(messagePublisher);
         }
 

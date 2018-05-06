@@ -2,6 +2,8 @@
 using MongoClient;
 using RabbitCore;
 using RabbitMongoService;
+//using RabbitCore;
+//using RabbitMongoService;
 using ServiceInterfaces;
 using System.Net.Http.Headers;
 using System.Web.Http;
@@ -32,28 +34,39 @@ namespace NoteAPI
         private static void RegisterTypes(UnityContainer container)
         {
             // NOTE: should try and do most of this by NAMING convention!
+            // If you are registering all types like this, better to use POOR man's Dependency Injection!
             // Keys
             var rabbit = "rabbit";
             var mongo = "mongo";
             var client = "client";
             var service = "service";
+            var creator = "creator";
+            var reader = "reader";
+            var updater = "updater";
+            var deleter = "deleter";
             // Other
             var hostName = "localhost";
             var exchangeName = "";
             // Use default exchange "" to use queueName as routing key.
 
-            // Rabbit Client
-            var queueName = "";
-            container.RegisterType<IMessagePublisher, RabbitPublisher>(
-                client, new InjectionConstructor(hostName, exchangeName, queueName)); 
-            //queueName should be different for each of below, SO hardcoded it in for now.          
-            container.RegisterType<IMessageConsumer, RabbitConsumer>(
-                new InjectionConstructor(hostName, queueName));
-            container.RegisterType<IObjectCreator, RabbitCreator>(rabbit);
-            container.RegisterType<IObjectReader , RabbitReader >(rabbit);
-            container.RegisterType<IObjectUpdater, RabbitUpdater>(rabbit);
-            container.RegisterType<IObjectDeleter, RabbitDeleter>(rabbit);
-            container.RegisterType<IObjectBroker , RabbitBroker >(
+            // Rabbit Client     
+            var noteApiQueueName = "NoteApi";
+            var createNoteQueueName = "CreateNote";
+            var readNotesQueueName = "ReadNotes";
+            var updateNoteQueueName = "UpdateNote";
+            var deleteNoteQueueName = "DeleteNote";
+            container.RegisterType<IMessageConsumer, MessageConsumer>(new InjectionConstructor(hostName, noteApiQueueName));
+
+            container.RegisterType<IMessagePublisher, MessagePublisher>(creator, new InjectionConstructor(hostName, exchangeName, createNoteQueueName));
+            container.RegisterType<IMessagePublisher, MessagePublisher>(reader, new InjectionConstructor(hostName, exchangeName, readNotesQueueName));
+            container.RegisterType<IMessagePublisher, MessagePublisher>(updater, new InjectionConstructor(hostName, exchangeName, updateNoteQueueName));
+            container.RegisterType<IMessagePublisher, MessagePublisher>(deleter, new InjectionConstructor(hostName, exchangeName, deleteNoteQueueName));
+
+            container.RegisterType<IObjectCreator, EntryCreator >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(creator)));
+            container.RegisterType<IObjectReader , EntryReader >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessageConsumer>(), new ResolvedParameter<IMessagePublisher>(reader)));
+            container.RegisterType<IObjectUpdater, RabbitUpdater>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(updater)));
+            container.RegisterType<IObjectDeleter, RabbitDeleter>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(deleter)));
+            container.RegisterType<IControllerEntryBroker, EntryBroker>(
                 new HierarchicalLifetimeManager(),
                 new InjectionConstructor(
                     new ResolvedParameter<IObjectCreator>(rabbit),
@@ -65,18 +78,16 @@ namespace NoteAPI
                //Maybe I can just Register the controller here myself?
                //I think attributes in controller may have done it.
 
-            // Rabbit Service
-            var NoteApiQueueName = "NoteApi";
-            container.RegisterType<IMessagePublisher, RabbitPublisher>(
-                service, new InjectionConstructor(hostName, exchangeName, NoteApiQueueName));
-            container.RegisterType<IAutoMessageConsumer, RabbitAutoConsumer>();
-
             // Mongo Client
-            container.RegisterType<IObjectCreator, MongoCreator>(mongo);
-            container.RegisterType<IObjectReader , MongoReader >(mongo);
-            container.RegisterType<IObjectUpdater, MongoUpdater>(mongo);
-            container.RegisterType<IObjectDeleter, MongoDeleter>(mongo);
-            container.RegisterType<IObjectBroker , MongoBroker >(
+            var databaseName = "test";
+            var collectionName = "Objects";
+            container.RegisterType<IObjectCreator, MongoCreator>(
+                mongo, 
+                new InjectionConstructor(new ResolvedParameter<IObjectReader>(mongo), databaseName, collectionName));
+            container.RegisterType<IObjectReader , MongoReader >(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IObjectUpdater, MongoUpdater>(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IObjectDeleter, MongoDeleter>(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IMongoEntryBroker, MongoBroker>(
                 new InjectionConstructor(
                     new ResolvedParameter<IObjectCreator>(mongo),
                     new ResolvedParameter<IObjectReader >(mongo),
@@ -86,10 +97,27 @@ namespace NoteAPI
             );
 
             // Rabbit Mongo Service
-            container.RegisterType<IAutoConsumerCreator, AutoConsumerCreator>();
-            container.RegisterType<IAutoConsumerReader , AutoConsumerReader >();
-            //container.RegisterType<IAutoConsumerEntryUpdater, RabbitMongoUpdater>();
-            //container.RegisterType<IAutoConsumerEntryDeleter, RabbitMongoDeleter>();
+            container.RegisterType<IMessagePublisher, MessagePublisher>(service, new InjectionConstructor(hostName, exchangeName, noteApiQueueName));
+            container.RegisterType<IAutoMessageConsumer, AutoMessageConsumer>(creator, new InjectionConstructor(hostName, createNoteQueueName));
+            container.RegisterType<IAutoMessageConsumer, AutoMessageConsumer>(reader, new InjectionConstructor(hostName, readNotesQueueName));
+            container.RegisterType<IAutoMessageConsumer, AutoMessageConsumer>(updater, new InjectionConstructor(hostName, updateNoteQueueName));
+            container.RegisterType<IAutoMessageConsumer, AutoMessageConsumer>(deleter, new InjectionConstructor(hostName, deleteNoteQueueName));
+
+            container.RegisterType<IAutoConsumerCreator, AutoConsumerCreator>(
+                new InjectionConstructor(
+                    new ResolvedParameter<IAutoMessageConsumer>(creator), 
+                    new ResolvedParameter<IObjectCreator>(mongo)
+                )
+            );
+            container.RegisterType<IAutoConsumerReader , AutoConsumerReader >(
+                 new InjectionConstructor(
+                    new ResolvedParameter<IAutoMessageConsumer>(reader),
+                    new ResolvedParameter<IObjectReader>(mongo),
+                    new ResolvedParameter<IMessagePublisher>(service)
+                )
+            );
+            //container.RegisterType<IAutoConsumerUpdater, AutoConsumerUpdater>();
+            //container.RegisterType<IAutoConsumerDeleter, AutoConsumerDeleter>();
             container.RegisterType<IService, Service>(
                 new InjectionConstructor(
                     new ResolvedParameter<IAutoConsumerCreator>(),

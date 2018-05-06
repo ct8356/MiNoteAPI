@@ -9,20 +9,19 @@ namespace IntegrationTests
     public class RabbitPublisherAutoConsumerTests
     {
 
-        protected RabbitAutoConsumer _consumer;
-        protected RabbitPublisher _publisher;
-        protected string _queueName;
-        protected AutoResetEvent _autoResetEvent;
-        protected string _message;
+        AutoMessageConsumer AutoConsumer;
+        MessagePublisher _publisher;
+        AutoResetEvent _autoResetEvent;
+        string _message;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             var hostName = "localhost";
             var exchangeName = "";
-            _queueName = "hello";
-            _consumer = new RabbitAutoConsumer(hostName, _queueName);
-            _publisher = new RabbitPublisher(hostName, exchangeName, _queueName);
+            var queueName = "hello";
+            AutoConsumer = new AutoMessageConsumer(hostName, queueName);
+            _publisher = new MessagePublisher(hostName, exchangeName, queueName);
             _autoResetEvent = new AutoResetEvent(false);
         }
 
@@ -33,21 +32,21 @@ namespace IntegrationTests
         }
 
         [Test]
-        public void PublishMessage_ConsumeMessage_PassesMessage()
+        public void PublishMessage_AutoConsumeMessage_PassesMessage()
         {
             var messageSent = "Hello world!";
-            _consumer.MessageReceived += _consumer_MessageReceived;
-            _consumer.Start();
+            AutoConsumer.MessageReceived += _consumer_MessageReceived;
+            AutoConsumer.Start();
             //Perhaps try waiting for 10 secs here
             //to make sure it does not crash.
 
-            _publisher.PublishMessage(_queueName, messageSent);
+            _publisher.PublishMessage(messageSent);
 
             _autoResetEvent.WaitOne(); //Wait until message received.
             Assert.AreEqual(messageSent, _message);
-            _consumer.Stop();
+            AutoConsumer.Stop();
             //This stops it from running continuously. Nice.
-            //I guess because once the chanel is killed,
+            //I guess because once the channel is killed,
             //It has no context that can wait for a Message to come back,
             //so it stops waiting.
         }

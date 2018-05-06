@@ -5,26 +5,27 @@ namespace RabbitMongoService
     public class Service : IService
     { 
 
-        IAutoConsumerCreator _consumerCreator;
-        IAutoConsumerReader _readerPublisher;
+        IAutoConsumerCreator ConsumerCreator;
+        IAutoConsumerReader ConsumerReader;
 
         public Service(
             IAutoConsumerCreator consumerCreator, 
-            IAutoConsumerReader readerPublisher,
-            string databaseName)
+            IAutoConsumerReader readerPublisher)
         {
-            _consumerCreator = consumerCreator;
-            _readerPublisher = readerPublisher;
+            ConsumerCreator = consumerCreator;
+            ConsumerReader = readerPublisher;
         }
 
         public void Start()
         {
-            _consumerCreator.Start();
+            ConsumerCreator.Start();
+            ConsumerReader.Start();
         }
 
         public void Stop()
         {
-            _consumerCreator.Stop();
+            ConsumerCreator.Stop();
+            ConsumerReader.Stop();
         }
 
     }
