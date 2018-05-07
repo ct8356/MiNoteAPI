@@ -7,21 +7,21 @@ using System.Linq;
 
 namespace MongoClient
 {
-    public class MongoBroker : IMongoEntryBroker
+    public class EntryBroker : IMongoEntryBroker
     {
 
         IMongoCollection<BsonDocument> Documents { get; set; }
         IMongoCollection<dynamic> Objects { get; set; }
-        IObjectCreator _creator;
-        IObjectReader _reader;
-        IObjectUpdater _updater;
-        IObjectDeleter _deleter;
+        IEntryCreator _creator;
+        IEntryReader _reader;
+        IEntryUpdater _updater;
+        IEntryDeleter _deleter;
 
-        public MongoBroker(
-            IObjectCreator creator,
-            IObjectReader reader,
-            IObjectUpdater updater,
-            IObjectDeleter deleter)
+        public EntryBroker(
+            IEntryCreator creator,
+            IEntryReader reader,
+            IEntryUpdater updater,
+            IEntryDeleter deleter)
         {
             _creator = creator;
             _reader = reader;

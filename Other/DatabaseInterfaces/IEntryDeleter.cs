@@ -1,7 +1,7 @@
 ﻿
 namespace DatabaseInterfaces
 {
-    public interface IObjectDeleter
+    public interface IEntryDeleter
     {
         void DeleteObject(int id);
     }

@@ -1,6 +1,6 @@
 ﻿namespace DatabaseInterfaces
 {
-    public interface IControllerEntryBroker 
+    public interface IRabbitEntryBroker 
         : IEntryBroker
     {
     }

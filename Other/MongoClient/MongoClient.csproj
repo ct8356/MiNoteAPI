@@ -61,11 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoCreator.cs" />
-    <Compile Include="MongoBroker.cs" />
-    <Compile Include="MongoDeleter.cs" />
-    <Compile Include="MongoUpdater.cs" />
-    <Compile Include="MongoReader.cs" />
+    <Compile Include="EntryCreator.cs" />
+    <Compile Include="EntryBroker.cs" />
+    <Compile Include="EntryDeleter.cs" />
+    <Compile Include="EntryUpdater.cs" />
+    <Compile Include="EntryReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

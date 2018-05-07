@@ -43,13 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IControllerEntryBroker.cs" />
+    <Compile Include="IRabbitEntryBroker.cs" />
     <Compile Include="IMongoEntryBroker.cs" />
     <Compile Include="IEntryBroker.cs" />
-    <Compile Include="IObjectCreator.cs" />
-    <Compile Include="IObjectDeleter.cs" />
-    <Compile Include="IObjectReader.cs" />
-    <Compile Include="IObjectUpdater.cs" />
+    <Compile Include="IEntryCreator.cs" />
+    <Compile Include="IEntryDeleter.cs" />
+    <Compile Include="IEntryReader.cs" />
+    <Compile Include="IEntryUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

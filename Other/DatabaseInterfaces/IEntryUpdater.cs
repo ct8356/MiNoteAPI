@@ -2,7 +2,7 @@
 
 namespace DatabaseInterfaces
 {
-    public interface IObjectUpdater
+    public interface IEntryUpdater
     {
         void UpdateObject(JObject jObject);
     }

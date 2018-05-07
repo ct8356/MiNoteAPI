@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace MongoClient
 {
-    public class MongoCreator : IObjectCreator
+    public class EntryCreator : IEntryCreator
     {
-        IObjectReader ObjectReader { get; set; }
+        IEntryReader ObjectReader { get; set; }
         IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoCreator(IObjectReader reader, string databaseName, string collectionName)
+        public EntryCreator(IEntryReader reader, string databaseName, string collectionName)
         {
             ObjectReader = reader;
             var client = new MongoDB.Driver.MongoClient();

@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoConsumerUpdater.cs" />
+    <Compile Include="AutoConsumerDeleter.cs" />
     <Compile Include="AutoConsumerReader.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

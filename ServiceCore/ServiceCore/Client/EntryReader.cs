@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RabbitCore
 {
-    public class EntryReader : IObjectReader
+    public class EntryReader : IEntryReader
     {
         IMessageConsumer _messageConsumer;
         IMessagePublisher _messagePublisher;

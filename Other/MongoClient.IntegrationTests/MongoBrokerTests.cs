@@ -1,5 +1,4 @@
-﻿using MongoClient;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System.Linq;
@@ -7,39 +6,27 @@ using System.Linq;
 namespace IntegrationTests
 {
     [TestFixture]
-    public class MongoBrokerTests
+    public class MongoBrokerTests : TestBase
     {
-        MongoCreator Creator { get; set; }
-        MongoReader Reader { get; set; }
-        MongoBroker Broker;
+
+        [OneTimeSetUp]
+        public new void OneTimeSetUp()
+        {
+            base.OneTimeSetUp();
+        }
 
         [SetUp]
-        public void SetUp()
+        public new void SetUp()
         {
-            var databaseName = "test";
-            var collectionName = "Objects";
-            Reader = new MongoReader(databaseName, collectionName);
-            Creator = new MongoCreator(Reader, databaseName, collectionName);
-            Broker = new MongoBroker(Creator, Reader, null, null);
-            var repo = Broker;
-            repo.Initialize("test");
-            repo.DeleteEverything();
+            base.SetUp();
         }
 
         [Test]
         public void CreateObject_WithNothingInDb_AddsObjectWithId1()
         {
-            dynamic @object = new
-            {
-                _id = 1,
-                Content = "new object"
-            };
-            JObject jObject = JObject.FromObject(@object);
+            CreateEntry("new object");
 
-            var repository = Broker;
-            repository.CreateObject(jObject);
-
-            var jObjects = repository.ReadObjects();
+            var jObjects = Broker.ReadObjects();
             int actualId = (int)jObjects.Max(o => o["_id"]);
             Assert.AreEqual(1, actualId);      
         }
@@ -47,33 +34,18 @@ namespace IntegrationTests
         [Test]
         public void CreateObject_WithObjectsInDb_AddsObjectWithNewId()
         {
-            dynamic @object = new
-            {
-                _id = 1,
-                Content = "new object"
-            };
-            JObject jObject = JObject.FromObject(@object);
+            CreateEntry("new object");
+            CreateEntry("new object");
 
-            var repository = Broker;
-            repository.ConditionalSeed();
-            repository.CreateObject(jObject);
-
-            var jObjects = repository.ReadObjects();
+            var jObjects = Broker.ReadObjects();
             int actualId = (int)jObjects.Max(o => o["_id"]);
-            Assert.AreEqual(3, actualId);
+            Assert.AreEqual(2, actualId);
         }
 
         [Test]
         public void CreateObject_WithJObject_AddsObjectWithIdAndContent()
         {
-            dynamic @object = new
-            {
-                _id = 1,
-                Content = "new object"
-            };
-            JObject jObject = JObject.FromObject(@object);
-
-            Broker.CreateObject(jObject);
+            CreateEntry("new object");
 
             var jObjects = Broker.ReadObjects();
             int actualId = (int)jObjects.Max(o => o["_id"]);
@@ -85,31 +57,30 @@ namespace IntegrationTests
         [Test]
         public void UpdateObject_WithJObject_UpdatesObject()
         {
+            CreateEntry("new object");
             dynamic @object = new
             {
                 _id = 1,
-                Content = "new object"
+                Content = "updated object"
             };
             JObject jObject = JObject.FromObject(@object);
 
-            var repository = Broker;
-            repository.ConditionalSeed();
-            repository.UpdateObject(jObject);
+            Broker.UpdateObject(jObject);
 
-            var actualObject = repository.ReadObjects().First(o => (int)o["_id"] == 1);
+            var actualObject = Broker.ReadObjects().First(o => (int)o["_id"] == 1);
             Assert.AreEqual(1, (int)actualObject["_id"]);
-            Assert.AreEqual("new object", (string)actualObject["Content"]);
+            Assert.AreEqual("updated object", (string)actualObject["Content"]);
         }
 
         [Test]
         public void DeleteObject_WithId_DeletesObject()
         {
-            var repository = Broker;
-            repository.ConditionalSeed();
-            repository.DeleteObject(1);
+            CreateEntry("new object");
 
-            var actualObjects = repository.ReadObjects();
-            Assert.AreEqual(1, actualObjects.Count());
+            Broker.DeleteObject(1);
+
+            var actualObjects = Broker.ReadObjects();
+            Assert.AreEqual(0, actualObjects.Count());
         }
 
         #region Related experiments

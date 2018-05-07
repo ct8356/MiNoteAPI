@@ -1,9 +1,6 @@
 ﻿using DatabaseInterfaces;
-using MongoClient;
 using RabbitCore;
 using RabbitMongoService;
-//using RabbitCore;
-//using RabbitMongoService;
 using ServiceInterfaces;
 using System.Net.Http.Headers;
 using System.Web.Http;
@@ -62,37 +59,35 @@ namespace NoteAPI
             container.RegisterType<IMessagePublisher, MessagePublisher>(updater, new InjectionConstructor(hostName, exchangeName, updateNoteQueueName));
             container.RegisterType<IMessagePublisher, MessagePublisher>(deleter, new InjectionConstructor(hostName, exchangeName, deleteNoteQueueName));
 
-            container.RegisterType<IObjectCreator, EntryCreator >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(creator)));
-            container.RegisterType<IObjectReader , EntryReader >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessageConsumer>(), new ResolvedParameter<IMessagePublisher>(reader)));
-            container.RegisterType<IObjectUpdater, RabbitUpdater>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(updater)));
-            container.RegisterType<IObjectDeleter, RabbitDeleter>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(deleter)));
-            container.RegisterType<IControllerEntryBroker, EntryBroker>(
+            container.RegisterType<IEntryCreator, RabbitCore.EntryCreator >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(creator)));
+            container.RegisterType<IEntryReader , RabbitCore.EntryReader >(rabbit, new InjectionConstructor(new ResolvedParameter<IMessageConsumer>(), new ResolvedParameter<IMessagePublisher>(reader)));
+            container.RegisterType<IEntryUpdater, RabbitCore.EntryUpdater>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(updater)));
+            container.RegisterType<IEntryDeleter, RabbitCore.EntryDeleter>(rabbit, new InjectionConstructor(new ResolvedParameter<IMessagePublisher>(deleter)));
+            container.RegisterType<IRabbitEntryBroker, RabbitCore.EntryBroker>(
                 new HierarchicalLifetimeManager(),
                 new InjectionConstructor(
-                    new ResolvedParameter<IObjectCreator>(rabbit),
-                    new ResolvedParameter<IObjectReader >(rabbit),
-                    new ResolvedParameter<IObjectUpdater>(rabbit),
-                    new ResolvedParameter<IObjectDeleter>(rabbit)
+                    new ResolvedParameter<IEntryCreator>(rabbit),
+                    new ResolvedParameter<IEntryReader>(rabbit),
+                    new ResolvedParameter<IEntryUpdater>(rabbit),
+                    new ResolvedParameter<IEntryDeleter>(rabbit)
                 )
-            ); //need to name it as rabbit somehow, so controller knows to use THIS one!
-               //Maybe I can just Register the controller here myself?
-               //I think attributes in controller may have done it.
+            );
 
             // Mongo Client
-            var databaseName = "test";
+            var databaseName = "Test";
             var collectionName = "Objects";
-            container.RegisterType<IObjectCreator, MongoCreator>(
+            container.RegisterType<IEntryCreator, MongoClient.EntryCreator>(
                 mongo, 
-                new InjectionConstructor(new ResolvedParameter<IObjectReader>(mongo), databaseName, collectionName));
-            container.RegisterType<IObjectReader , MongoReader >(mongo, new InjectionConstructor(databaseName, collectionName));
-            container.RegisterType<IObjectUpdater, MongoUpdater>(mongo, new InjectionConstructor(databaseName, collectionName));
-            container.RegisterType<IObjectDeleter, MongoDeleter>(mongo, new InjectionConstructor(databaseName, collectionName));
-            container.RegisterType<IMongoEntryBroker, MongoBroker>(
+                new InjectionConstructor(new ResolvedParameter<IEntryReader>(mongo), databaseName, collectionName));
+            container.RegisterType<IEntryReader , MongoClient.EntryReader >(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IEntryUpdater, MongoClient.EntryUpdater>(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IEntryDeleter, MongoClient.EntryDeleter>(mongo, new InjectionConstructor(databaseName, collectionName));
+            container.RegisterType<IMongoEntryBroker, MongoClient.EntryBroker>(
                 new InjectionConstructor(
-                    new ResolvedParameter<IObjectCreator>(mongo),
-                    new ResolvedParameter<IObjectReader >(mongo),
-                    new ResolvedParameter<IObjectUpdater>(mongo),
-                    new ResolvedParameter<IObjectDeleter>(mongo)
+                    new ResolvedParameter<IEntryCreator>(mongo),
+                    new ResolvedParameter<IEntryReader >(mongo),
+                    new ResolvedParameter<IEntryUpdater>(mongo),
+                    new ResolvedParameter<IEntryDeleter>(mongo)
                 )
             );
 
@@ -106,22 +101,34 @@ namespace NoteAPI
             container.RegisterType<IAutoConsumerCreator, AutoConsumerCreator>(
                 new InjectionConstructor(
                     new ResolvedParameter<IAutoMessageConsumer>(creator), 
-                    new ResolvedParameter<IObjectCreator>(mongo)
+                    new ResolvedParameter<IEntryCreator>(mongo)
                 )
             );
             container.RegisterType<IAutoConsumerReader , AutoConsumerReader >(
                  new InjectionConstructor(
                     new ResolvedParameter<IAutoMessageConsumer>(reader),
-                    new ResolvedParameter<IObjectReader>(mongo),
+                    new ResolvedParameter<IEntryReader>(mongo),
                     new ResolvedParameter<IMessagePublisher>(service)
                 )
             );
-            //container.RegisterType<IAutoConsumerUpdater, AutoConsumerUpdater>();
-            //container.RegisterType<IAutoConsumerDeleter, AutoConsumerDeleter>();
-            container.RegisterType<IService, Service>(
+            container.RegisterType<IAutoConsumerUpdater, AutoConsumerUpdater>(
+                new InjectionConstructor(
+                    new ResolvedParameter<IAutoMessageConsumer>(updater),
+                    new ResolvedParameter<IEntryUpdater>(mongo)
+                )
+            );
+            container.RegisterType<IAutoConsumerDeleter, AutoConsumerDeleter>(
+                new InjectionConstructor(
+                    new ResolvedParameter<IAutoMessageConsumer>(deleter),
+                    new ResolvedParameter<IEntryDeleter>(mongo)
+                )
+            );
+            container.RegisterType<IService, CrudService>(
                 new InjectionConstructor(
                     new ResolvedParameter<IAutoConsumerCreator>(),
-                    new ResolvedParameter<IAutoConsumerReader >()
+                    new ResolvedParameter<IAutoConsumerReader >(),
+                    new ResolvedParameter<IAutoConsumerUpdater>(),
+                    new ResolvedParameter<IAutoConsumerDeleter>()
                 )
             );
         }

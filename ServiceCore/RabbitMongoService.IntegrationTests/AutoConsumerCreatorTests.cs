@@ -10,38 +10,23 @@ using System.Threading;
 namespace IntegrationTests
 {
     [TestFixture]
-    public class AutoConsumerCreatorTests
+    public class AutoConsumerCreatorTests : RabbitMongoTestBase
     {
-        MongoBroker Broker;
-        MongoCreator Creator;
-        MongoReader Reader;
         MessagePublisher Publisher;
         AutoConsumerCreator ConsumerCreator;    
-        AutoResetEvent AutoResetEvent;
 
         [OneTimeSetUp]
-        public void SetUp()
+        public new void OneTimeSetUp()
         {
-            var databaseName = "test";
-            var collectionName = "Objects";
-            var hostName = "localHost";
-            var exchangeName = "";
-            var queueName = "CreateNote";
+            base.OneTimeSetUp();
 
-            Reader = new MongoReader(databaseName, collectionName);
-            Creator = new MongoCreator(Reader, databaseName, collectionName);
-            Broker = new MongoBroker(Creator, Reader, null, null);
-            Broker.Initialize("test");
-            Broker.DeleteEverything();
+            Publisher = new MessagePublisher(HostName, ExchangeName, CreatorQueueName);
+            ConsumerCreator = new AutoConsumerCreator(
+                new AutoMessageConsumer(HostName, CreatorQueueName), 
+                Creator);
 
-            Publisher = new MessagePublisher(hostName, exchangeName, queueName);
-            var autoConsumer = new AutoMessageConsumer(hostName, queueName);
-            Reader = new MongoReader(databaseName, collectionName);
-            var objectCreator = new MongoCreator(Reader, databaseName, collectionName);
-            ConsumerCreator = new AutoConsumerCreator(autoConsumer, objectCreator);
             // Subscribe
             ConsumerCreator.EntryCreated += ConsumerCreator_EntryCreated;
-            AutoResetEvent = new AutoResetEvent(false);
         }
 
         [Test]

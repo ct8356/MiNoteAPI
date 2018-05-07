@@ -8,12 +8,12 @@ namespace RabbitMongoService
     public class AutoConsumerCreator : IAutoConsumerCreator
     {
         IAutoMessageConsumer _autoConsumer;
-        IObjectCreator _objectCreator;
+        IEntryCreator _objectCreator;
         public event EventHandler EntryCreated;
 
         public AutoConsumerCreator(
             IAutoMessageConsumer autoConsumer, 
-            IObjectCreator objectCreator)
+            IEntryCreator objectCreator)
         {  
             autoConsumer.MessageReceived += OnMessageReceived;    
             _autoConsumer = autoConsumer;

@@ -69,11 +69,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoConsumerReaderTests.cs" />
+    <Compile Include="RabbitMongoTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoConsumerCreatorTests.cs" />
-    <Compile Include="EntryCreatorReaderTests.cs" />
-    <Compile Include="RabbitDeleterTests.cs" />
-    <Compile Include="RabbitUpdaterTests.cs" />
+    <Compile Include="AutoConsumerDeleterTests.cs" />
+    <Compile Include="AutoConsumerUpdaterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -84,9 +84,17 @@
       <Project>{088ce085-2f9b-4869-a1f4-8b4bbfc9a298}</Project>
       <Name>DatabaseInterfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Other\MongoClient.IntegrationTests\MongoClient.IntegrationTests.csproj">
+      <Project>{8d34c683-eee1-44ce-9200-c1d4258a11c2}</Project>
+      <Name>MongoClient.IntegrationTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Other\MongoClient\MongoClient.csproj">
       <Project>{fbb63d03-0ef0-4011-9b70-438af70db936}</Project>
       <Name>MongoClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntegrationTests\RabbitCore.IntegrationTests.csproj">
+      <Project>{2f0ded8b-b1af-4e81-812a-1a35b803508d}</Project>
+      <Name>RabbitCore.IntegrationTests</Name>
     </ProjectReference>
     <ProjectReference Include="..\RabbitMongoService\RabbitMongoService.csproj">
       <Project>{8f2aa35d-fe2a-47e0-b108-79317d54841a}</Project>

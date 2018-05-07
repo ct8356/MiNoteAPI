@@ -1,10 +1,10 @@
 ﻿namespace DatabaseInterfaces
 {
     public interface IEntryBroker 
-        : IObjectCreator
-        , IObjectReader
-        , IObjectUpdater
-        , IObjectDeleter
+        : IEntryCreator
+        , IEntryReader
+        , IEntryUpdater
+        , IEntryDeleter
     {
         //wrap MessagePublisher and MessageConsumer in a broker,
         //that way, could just use straight connection to Mongo, 

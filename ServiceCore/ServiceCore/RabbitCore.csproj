@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\EntryCreator.cs" />
-    <Compile Include="Client\RabbitUpdater.cs" />
-    <Compile Include="Client\RabbitDeleter.cs" />
-    <Compile Include="Client\RabbitReader.cs" />
+    <Compile Include="Client\EntryUpdater.cs" />
+    <Compile Include="Client\EntryDeleter.cs" />
+    <Compile Include="Client\EntryReader.cs" />
     <Compile Include="Core\MessageEventArgs.cs" />
     <Compile Include="Core\MessagePublisher.cs" />
     <Compile Include="Service\AutoMessageConsumer.cs" />

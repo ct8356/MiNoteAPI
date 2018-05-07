@@ -4,11 +4,11 @@ using MongoDB.Driver;
 
 namespace MongoClient
 {
-    public class MongoDeleter : IObjectDeleter
+    public class EntryDeleter : IEntryDeleter
     {
         IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoDeleter(string databaseName, string collectionName)
+        public EntryDeleter(string databaseName, string collectionName)
         {
             var client = new MongoDB.Driver.MongoClient();
             var database = client.GetDatabase(databaseName);

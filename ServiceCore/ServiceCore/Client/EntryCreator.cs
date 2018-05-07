@@ -4,7 +4,7 @@ using ServiceInterfaces;
 
 namespace RabbitCore
 {
-    public class EntryCreator : IObjectCreator
+    public class EntryCreator : IEntryCreator
     {
         IMessagePublisher _messagePublisher;
 

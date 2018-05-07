@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace MongoClient
 {
-    public class MongoReader : IObjectReader
+    public class EntryReader : IEntryReader
     {
         IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoReader(string databaseName, string collectionName)
+        public EntryReader(string databaseName, string collectionName)
         {
             var client = new MongoDB.Driver.MongoClient();
             var database = client.GetDatabase(databaseName);

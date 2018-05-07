@@ -3,11 +3,11 @@ using ServiceInterfaces;
 
 namespace RabbitCore
 {
-    public class RabbitDeleter : IObjectDeleter
+    public class EntryDeleter : IEntryDeleter
     {
         IMessagePublisher _messagePublisher;
 
-        public RabbitDeleter(IMessagePublisher messagePublisher)
+        public EntryDeleter(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;
         }

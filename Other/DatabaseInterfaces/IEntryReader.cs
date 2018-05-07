@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DatabaseInterfaces
 {
-    public interface IObjectReader
+    public interface IEntryReader
     {
         ICollection<JObject> ReadObjects();
     }

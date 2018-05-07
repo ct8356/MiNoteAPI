@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace RabbitCore
 {
-    public class EntryBroker : IControllerEntryBroker
+    public class EntryBroker : IRabbitEntryBroker
     {
-        IObjectCreator _creator;
-        IObjectReader _reader;
-        IObjectUpdater _updater;
-        IObjectDeleter _deleter;
+        IEntryCreator _creator;
+        IEntryReader _reader;
+        IEntryUpdater _updater;
+        IEntryDeleter _deleter;
 
         public EntryBroker(
-            IObjectCreator creator,
-            IObjectReader reader,
-            IObjectUpdater updater,
-            IObjectDeleter deleter)
+            IEntryCreator creator,
+            IEntryReader reader,
+            IEntryUpdater updater,
+            IEntryDeleter deleter)
         {
             _creator = creator;
             _reader = reader;

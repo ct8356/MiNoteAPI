@@ -1,5 +1,4 @@
-﻿using MongoClient;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RabbitCore;
@@ -11,11 +10,8 @@ using System.Threading;
 namespace IntegrationTests
 {
     [TestFixture]
-    public class AutoConsumerReaderTests
+    public class AutoConsumerReaderTests : RabbitMongoTestBase
     {
-        MongoBroker Broker;
-        MongoCreator Creator;
-        MongoReader Reader;
 
         MessagePublisher Publisher;
         AutoConsumerReader ConsumerReader;
@@ -24,24 +20,24 @@ namespace IntegrationTests
         AutoResetEvent AutoResetEvent;
 
         [OneTimeSetUp]
-        public void SetUp()
+        public new void OneTimeSetUp()
         {
-            var databaseName = "test";
+            var databaseName = "Test";
             var collectionName = "Objects";
             var hostName = "localHost";
             var exchangeName = "";
             var requestQueueName = "ReadNotes";
             var responseQueueName = "NoteAPI";
-            Reader = new MongoReader(databaseName, collectionName);
-            Creator = new MongoCreator(Reader, databaseName, collectionName);
-            Broker = new MongoBroker(Creator, Reader, null, null);
+            Reader = new MongoClient.EntryReader(databaseName, collectionName);
+            Creator = new MongoClient.EntryCreator(Reader, databaseName, collectionName);
+            Broker = new MongoClient.EntryBroker(Creator, Reader, null, null);
             Broker.Initialize(databaseName);
             Broker.DeleteEverything();
 
             Publisher = new MessagePublisher(hostName, exchangeName, requestQueueName);
 
             var autoConsumer = new AutoMessageConsumer(hostName, requestQueueName);
-            var objectReader = new MongoReader(databaseName, collectionName);      
+            var objectReader = new MongoClient.EntryReader(databaseName, collectionName);      
             var messagePublisher = new MessagePublisher(hostName, exchangeName, responseQueueName);
             ConsumerReader = new AutoConsumerReader(autoConsumer, objectReader, messagePublisher);
 

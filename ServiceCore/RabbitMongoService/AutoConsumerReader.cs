@@ -8,13 +8,13 @@ namespace RabbitMongoService
     public class AutoConsumerReader : IAutoConsumerReader
     {
         IAutoMessageConsumer _autoConsumer;
-        IObjectReader _objectReader;
+        IEntryReader _objectReader;
         IMessagePublisher _messagePublisher;
         public event EventHandler ResultsPublished;
 
         public AutoConsumerReader(
             IAutoMessageConsumer autoConsumer,
-            IObjectReader objectReader, 
+            IEntryReader objectReader, 
             IMessagePublisher messagePublisher)
         {
             autoConsumer.MessageReceived += OnMessageReceived;

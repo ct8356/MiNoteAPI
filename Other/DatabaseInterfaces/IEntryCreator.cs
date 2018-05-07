@@ -2,7 +2,7 @@
 
 namespace DatabaseInterfaces
 {
-    public interface IObjectCreator
+    public interface IEntryCreator
     {
         void CreateObject(JObject jObject);
     }

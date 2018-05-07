@@ -4,11 +4,11 @@ using ServiceInterfaces;
 
 namespace RabbitCore
 {
-    public class RabbitUpdater : IObjectUpdater
+    public class EntryUpdater : IEntryUpdater
     {
         IMessagePublisher _messagePublisher;
 
-        public RabbitUpdater(IMessagePublisher messagePublisher)
+        public EntryUpdater(IMessagePublisher messagePublisher)
         {
             _messagePublisher = messagePublisher;
         }

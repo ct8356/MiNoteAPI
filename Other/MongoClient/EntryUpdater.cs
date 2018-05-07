@@ -6,11 +6,11 @@ using System;
 
 namespace MongoClient
 {
-    public class MongoUpdater : IObjectUpdater
+    public class EntryUpdater : IEntryUpdater
     {
         IMongoCollection<BsonDocument> Documents { get; set; }
 
-        public MongoUpdater(string databaseName, string collectionName)
+        public EntryUpdater(string databaseName, string collectionName)
         {
             var client = new MongoDB.Driver.MongoClient();
             var database = client.GetDatabase(databaseName);

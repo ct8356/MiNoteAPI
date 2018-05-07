@@ -14,7 +14,7 @@ namespace NoteAPI.Controllers
         IEntryBroker Broker;
         IService Service;
 
-        public NotesController(IControllerEntryBroker broker, IService service)
+        public NotesController(IRabbitEntryBroker broker, IService service)
         {
             //Should not have to pass service here,
             //Just a hack so I can do it in one solution.
