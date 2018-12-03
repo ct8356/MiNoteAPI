@@ -207,7 +207,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\ReactConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -230,10 +229,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NoteService\NoteService\NoteService.csproj">
-      <Project>{12527040-b69d-4dc8-972c-c565c3e6eb77}</Project>
-      <Name>NoteService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Other\DatabaseInterfaces\DatabaseInterfaces.csproj">
       <Project>{088ce085-2f9b-4869-a1f4-8b4bbfc9a298}</Project>
       <Name>DatabaseInterfaces</Name>
